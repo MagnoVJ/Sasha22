@@ -1,10 +1,8 @@
+// Includes
 #include "Ex1_SpinningCube.hpp"
 #include "Ex1.1_MoreCubes.hpp"
-<<<<<<< HEAD
 #include "ex_camera.hpp"
-=======
-#include "Camera.hpp"
->>>>>>> 39eb0e1ef04e35e993b8165eb18996032958f805
+#include "point.hpp"
 
 #include "shader.h"
 #include <stb_image.h>
@@ -26,19 +24,13 @@
 void framebuffer_size_callback(GLFWwindow* window, int width, int height);
 void processInput(GLFWwindow *window);
 
-<<<<<<< HEAD
 void mouse_callback(GLFWwindow* window, double xposIn, double yposIn);
 void scroll_callback(GLFWwindow* window, double xoffset, double yoffset);
-=======
-// void mouse_callback(GLFWwindow* window, double xpos, double ypos);
-// void scroll_callback(GLFWwindow* window, double xoffset, double yoffset);
->>>>>>> 39eb0e1ef04e35e993b8165eb18996032958f805
 
 // settings
 const unsigned int SCR_WIDTH = 1366;
 const unsigned int SCR_HEIGHT = 768;
 
-<<<<<<< HEAD
 float deltaTime = 0.0f;
 float lastFrame = 0.0f;
 
@@ -54,12 +46,11 @@ glm::vec3 cameraFront;
 glm::vec3 cameraUp;
 
 // Application Specific opt
-bool opt_ex1_spinningcube = true;
+bool opt_ex1_spinningcube = false;
 bool opt_ex1_1_morecubes = false;
 bool opt_Camera = false;
+bool opt_Drawing_Primitives = true;
 
-=======
->>>>>>> 39eb0e1ef04e35e993b8165eb18996032958f805
 int main() { 
     // glfw: initialize and configure
     // ------------------------------
@@ -85,13 +76,8 @@ int main() {
     glfwSwapInterval(1); // Enable vsync
     glfwMaximizeWindow(window);
     glfwSetFramebufferSizeCallback(window, framebuffer_size_callback);
-<<<<<<< HEAD
     glfwSetCursorPosCallback(window, mouse_callback);
     glfwSetScrollCallback(window, scroll_callback);
-=======
-    // glfwSetCursorPosCallback(window, mouse_callback);
-    // glfwSetScrollCallback(window, scroll_callback);
->>>>>>> 39eb0e1ef04e35e993b8165eb18996032958f805
 
     // Setup Dear ImGui context
     IMGUI_CHECKVERSION();
@@ -132,10 +118,12 @@ int main() {
 
     glEnable(GL_DEPTH_TEST);
 
+    // Here you create an instance of the class that represents the functionality(menu) you're using/wants to include
     Ex1_SpinningCube example1_spinningcube;
     Ex1_1_MoreCuebes example1_1_morecubes;
     Camera example_camera;
-    
+    Point point_primitive;
+
     // Ex2_Camera example2_camera(window);
 
     unsigned int fbo;
@@ -170,7 +158,6 @@ int main() {
 	    std::cout << "ERROR::FRAMEBUFFER:: Framebuffer is not complete!" << std::endl;
     glBindFramebuffer(GL_FRAMEBUFFER, 0);  
 
-<<<<<<< HEAD
     cameraPos   = glm::vec3(0.0f, 0.0f, 3.0f);
     cameraFront = glm::vec3(0.0f, 0.0f, -1.0f);
     cameraUp    = glm::vec3(0.0f, 1.0f, 0.0f);
@@ -183,25 +170,13 @@ int main() {
         deltaTime = currentFrame - lastFrame;
         lastFrame = currentFrame;
 
-=======
-    // Application Specific opt
-    bool opt_ex1_spinningcube = true;
-    bool opt_ex1_1_morecubes = false;
-    bool opt_Camera = false;
-    // render loop
-    // -----------
-    while (!glfwWindowShouldClose(window)) {
->>>>>>> 39eb0e1ef04e35e993b8165eb18996032958f805
         // input
         // -----
         // if(!opt_ex2_Camera)
         processInput(window);
         // else
-<<<<<<< HEAD
         if(opt_Camera)
             example_camera.processInput(window, deltaTime, cameraPos, cameraFront, cameraUp);
-=======
->>>>>>> 39eb0e1ef04e35e993b8165eb18996032958f805
         //     example2_camera.processInput(window);
 
         // Start the Dear ImGui frame
@@ -217,12 +192,7 @@ int main() {
         // We are using the ImGuiWindowFlags_NoDocking flag to make the parent window not dockable into,
         // because it would be confusing to have two docking targets within each others.
         ImGuiWindowFlags window_flags = ImGuiWindowFlags_MenuBar | ImGuiWindowFlags_NoDocking;
-<<<<<<< HEAD
         if (opt_fullscreen) {
-=======
-        if (opt_fullscreen)
-        {
->>>>>>> 39eb0e1ef04e35e993b8165eb18996032958f805
             const ImGuiViewport* viewport = ImGui::GetMainViewport();
             ImGui::SetNextWindowPos(viewport->WorkPos);
             ImGui::SetNextWindowSize(viewport->WorkSize);
@@ -232,12 +202,7 @@ int main() {
             window_flags |= ImGuiWindowFlags_NoTitleBar | ImGuiWindowFlags_NoCollapse | ImGuiWindowFlags_NoResize | ImGuiWindowFlags_NoMove;
             window_flags |= ImGuiWindowFlags_NoBringToFrontOnFocus | ImGuiWindowFlags_NoNavFocus;
         }
-<<<<<<< HEAD
         else {
-=======
-        else
-        {
->>>>>>> 39eb0e1ef04e35e993b8165eb18996032958f805
             dockspace_flags &= ~ImGuiDockNodeFlags_PassthruCentralNode;
         }
 
@@ -262,28 +227,16 @@ int main() {
 
         // Submit the DockSpace
         ImGuiIO& io = ImGui::GetIO();
-<<<<<<< HEAD
         if (io.ConfigFlags & ImGuiConfigFlags_DockingEnable) {
 
-=======
-        if (io.ConfigFlags & ImGuiConfigFlags_DockingEnable)
-        {
->>>>>>> 39eb0e1ef04e35e993b8165eb18996032958f805
             ImGuiID dockspace_id = ImGui::GetID("MyDockSpace");
             ImGui::DockSpace(dockspace_id, ImVec2(0.0f, 0.0f), dockspace_flags);
         }
 
-<<<<<<< HEAD
         if (ImGui::BeginMenuBar()) {
 
             if (ImGui::BeginMenu("Options/Opções")) {
 
-=======
-        if (ImGui::BeginMenuBar())
-        {
-            if (ImGui::BeginMenu("Options/Opções"))
-            {
->>>>>>> 39eb0e1ef04e35e993b8165eb18996032958f805
                 // Disabling fullscreen would allow the window to be moved to the front of other windows,
                 // which we can't undo at the moment without finer window depth/z control.
                 ImGui::MenuItem("Fullscreen", NULL, &opt_fullscreen);
@@ -306,6 +259,7 @@ int main() {
                 if(lastState != opt_ex1_spinningcube) {
                     opt_ex1_1_morecubes = false;
                     opt_Camera = false;
+                    opt_Drawing_Primitives = false;
                 }
 
                 lastState = opt_ex1_1_morecubes;
@@ -313,6 +267,7 @@ int main() {
                 if(lastState != opt_ex1_1_morecubes) {
                     opt_ex1_spinningcube = false;
                     opt_Camera = false;
+                    opt_Drawing_Primitives = false;
                 }
 
                 lastState = opt_Camera;
@@ -320,6 +275,16 @@ int main() {
                 if(lastState != opt_Camera) {
                     opt_ex1_spinningcube = false;
                     opt_ex1_1_morecubes = false;
+                    opt_Drawing_Primitives = false;
+                }
+
+                //Working on...
+                lastState = opt_Drawing_Primitives;
+                ImGui::MenuItem("Drawing Primitives", NULL, &opt_Drawing_Primitives);
+                if(lastState != opt_Drawing_Primitives) {
+                    opt_ex1_spinningcube = false;
+                    opt_ex1_1_morecubes = false;
+                    opt_Camera = false;
                 }
 
                 ImGui::EndMenu();
@@ -347,16 +312,16 @@ int main() {
         glClearColor(0.2f, 0.3f, 0.3f, 1.0f);
         glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT); // also clear the depth buffer now!
 
+        // Drawing the viewport of specific functionality
         if(opt_ex1_spinningcube)
             example1_spinningcube.update_draw();
         else if(opt_ex1_1_morecubes)
             example1_1_morecubes.update_draw();
         else if(opt_Camera)
-<<<<<<< HEAD
             example_camera.update_draw(cameraPos, cameraFront, cameraUp, fov);
-=======
-            example_camera.update_draw();
->>>>>>> 39eb0e1ef04e35e993b8165eb18996032958f805
+        else if(opt_Drawing_Primitives)
+            point_primitive.UpdateAndDraw();
+
         // else if(opt_ex2_Camera)
         //     example2_camera.update_draw();
 
@@ -425,7 +390,6 @@ void framebuffer_size_callback(GLFWwindow* window, int width, int height) {
     // make sure the viewport matches the new window dimensions; note that width and 
     // height will be significantly larger than specified on retina displays.
     glViewport(0, 0, width, height);
-<<<<<<< HEAD
 }
 
 void mouse_callback(GLFWwindow* window, double xposIn, double yposIn) {
@@ -475,6 +439,4 @@ void scroll_callback(GLFWwindow* window, double xoffset, double yoffset) {
         if(fov > 45.0f)
             fov = 45.0f;
     }
-=======
->>>>>>> 39eb0e1ef04e35e993b8165eb18996032958f805
 }

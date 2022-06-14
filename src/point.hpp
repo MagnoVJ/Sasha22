@@ -11,6 +11,12 @@
 
 class Point {
 
+private:
+    unsigned int VBO, VAO, EBO;
+    std::shared_ptr<Shader> shd;
+
+public:
     Point();
+    void UpdateAndDraw();
 
 };

@@ -113,12 +113,7 @@ Ex1_1_MoreCuebes::Ex1_1_MoreCuebes() {
         glTexImage2D(GL_TEXTURE_2D, 0, GL_RGBA, width, height, 0, GL_RGBA, GL_UNSIGNED_BYTE, data);
         glGenerateMipmap(GL_TEXTURE_2D);
     }
-<<<<<<< HEAD
     else {
-=======
-    else
-    {
->>>>>>> 39eb0e1ef04e35e993b8165eb18996032958f805
         std::cout << "Failed to load texture" << std::endl;
     }
     stbi_image_free(data);
@@ -180,12 +175,7 @@ void Ex1_1_MoreCuebes::update_draw() {
 
     // render boxes
     glBindVertexArray(VAO);
-<<<<<<< HEAD
     for (unsigned int i = 0; i < 10; i++) {
-=======
-    for (unsigned int i = 0; i < 10; i++)
-    {
->>>>>>> 39eb0e1ef04e35e993b8165eb18996032958f805
         // calculate the model matrix for each object and pass it to shader before drawing
         glm::mat4 model = glm::mat4(1.0f);
         model = glm::translate(model, cubePositions[i]);
@@ -196,9 +186,4 @@ void Ex1_1_MoreCuebes::update_draw() {
         glDrawArrays(GL_TRIANGLES, 0, 36);
     }
 
-<<<<<<< HEAD
 }
-=======
-}
-
->>>>>>> 39eb0e1ef04e35e993b8165eb18996032958f805

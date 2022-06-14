@@ -1,6 +1,9 @@
 #include "point.hpp"
 
 Point::Point() {
+
+    shd = std::make_shared<Shader>("./src/shaders/point_vs.glsl", "./src/shaders/point_fs.glsl");
+    
     float vertices[] = {
         .5f, .5f, 0.0f, // top right
         .5f, -.5f, 0.0f, // bottom right
@@ -11,7 +14,6 @@ Point::Point() {
         0, 1, 3,
         1, 2, 3
     };
-    unsigned int VBO, VAO, EBO;
 
     glGenVertexArrays(1, &VAO);
     glGenBuffers(1, &VBO);
@@ -31,4 +33,20 @@ Point::Point() {
     glBindBuffer(GL_ARRAY_BUFFER, 0);
 
     glBindVertexArray(0);
+
+}
+
+void Point::UpdateAndDraw() {
+
+    glm::mat4 transform = glm::mat4(1.0f);
+    transform = glm::scale(transform, glm::vec3(1.0f, 1.0f, 1.0f));
+
+    shd->use();
+
+    shd->setMat4("transform", transform);
+
+    glBindVertexArray(VAO);
+
+    glDrawElements(GL_TRIANGLES, 6, GL_UNSIGNED_INT, 0);
+
 }

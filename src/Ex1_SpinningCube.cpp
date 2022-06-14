@@ -7,7 +7,7 @@ Ex1_SpinningCube::Ex1_SpinningCube() {
 
     ourShader = std::make_shared<Shader>("./src/shaders/6_1_coordinate_systems_vs.glsl", "./src/shaders/6_1_coordinate_systems_fs.glsl"); // you can name your shader files however you like
 
-    // set up vertex data (and buffer(s)) and configure vertex attributesgit
+    // set up vertex data (and buffer(s)) and configure vertex attributes
     // ------------------------------------------------------------------
     float vertices[] = {
         -0.5f, -0.5f, -0.5f,  0.0f, 0.0f,
@@ -107,14 +107,12 @@ Ex1_SpinningCube::Ex1_SpinningCube() {
     glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_LINEAR);
     // load image, create texture and generate mipmaps
     data = stbi_load("./assets/images/awesomeface.png", &width, &height, &nrChannels, 0);
-    if (data)
-    {
+    if (data) {
         // note that the awesomeface.png has transparency and thus an alpha channel, so make sure to tell OpenGL the data type is of GL_RGBA
         glTexImage2D(GL_TEXTURE_2D, 0, GL_RGBA, width, height, 0, GL_RGBA, GL_UNSIGNED_BYTE, data);
         glGenerateMipmap(GL_TEXTURE_2D);
     }
-    else
-    {
+    else {
         std::cout << "Failed to load texture" << std::endl;
     }
     stbi_image_free(data);
