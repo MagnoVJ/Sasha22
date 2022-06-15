@@ -81,7 +81,7 @@
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">
     <LinkIncremental>true</LinkIncremental>
-    <IncludePath>$(SolutionDir)glad\include;$(SolutionDir)glfw-3.3.6\include;$(SolutionDir)imgui;$(SolutionDir)imgui\backends;$(SolutionDir);$(IncludePath)</IncludePath>
+    <IncludePath>$(SolutionDir)dependencies\glad\include;$(SolutionDir)dependencies\glm;$(SolutionDir)dependencies\glfw-3.3.6\include;$(SolutionDir)dependencies\imgui;$(SolutionDir)dependencies\imgui\backends;$(SolutionDir);$(IncludePath)</IncludePath>
     <LibraryPath>$(SolutionDir)lib;$(LibraryPath)</LibraryPath>
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|x64'">
@@ -148,16 +148,16 @@
   </ItemDefinitionGroup>
 
   <ItemGroup>
-    <ClCompile Include="glad\src\glad.c" />
+    <ClCompile Include="dependencies\glad\src\glad.c" />
     <ClCompile Include="src\main.cpp" />
     <!-- <ClCompile Include="WinMain.cpp" /> -->
-    <ClCompile Include="imgui\imgui.cpp" />
-    <ClCompile Include="imgui\imgui_demo.cpp" />
-    <ClCompile Include="imgui\imgui_draw.cpp" />
-    <ClCompile Include="imgui\imgui_tables.cpp" />
-    <ClCompile Include="imgui\imgui_widgets.cpp" />
-    <ClCompile Include="imgui\backends\imgui_impl_glfw.cpp" />
-    <ClCompile Include="imgui\backends\imgui_impl_opengl3.cpp" />
+    <ClCompile Include="dependencies\imgui\imgui.cpp" />
+    <ClCompile Include="dependencies\imgui\imgui_demo.cpp" />
+    <ClCompile Include="dependencies\imgui\imgui_draw.cpp" />
+    <ClCompile Include="dependencies\imgui\imgui_tables.cpp" />
+    <ClCompile Include="dependencies\imgui\imgui_widgets.cpp" />
+    <ClCompile Include="dependencies\imgui\backends\imgui_impl_glfw.cpp" />
+    <ClCompile Include="dependencies\imgui\backends\imgui_impl_opengl3.cpp" />
     <ClCompile Include="src\stb_image.cpp" />
     <ClCompile Include="src\Ex1_SpinningCube.cpp" />
     <ClCompile Include="src\Ex1.1_MoreCubes.cpp" />
@@ -165,12 +165,12 @@
     <ClCompile Include="src\point.cpp" />
   </ItemGroup>
    <ItemGroup>
-    <ClInclude Include="imgui\imconfig.h" />
-    <ClInclude Include="imgui\imgui.h" />
-    <ClInclude Include="imgui\imgui_internal.h" />
-    <ClInclude Include="imgui\backends\imgui_impl_glfw.h" />
-    <ClInclude Include="imgui\backends\imgui_impl_opengl3.h" />
-    <ClInclude Include="imgui\backends\imgui_impl_opengl3_loader.h" />
+    <ClInclude Include="dependencies\imgui\imconfig.h" />
+    <ClInclude Include="dependencies\imgui\imgui.h" />
+    <ClInclude Include="dependencies\imgui\imgui_internal.h" />
+    <ClInclude Include="dependencies\imgui\backends\imgui_impl_glfw.h" />
+    <ClInclude Include="dependencies\imgui\backends\imgui_impl_opengl3.h" />
+    <ClInclude Include="dependencies\imgui\backends\imgui_impl_opengl3_loader.h" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">
