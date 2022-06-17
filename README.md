@@ -14,4 +14,4 @@ After that, use the Developer Command Prompt or PowerShell for VS 2022, navigate
 
 Execute the application by calling: `./x64/Debug/Sasha22.exe` in your terminal.
 
-This repository does not contain the asset graphics of the application.
+This repository does not contain the graphic assets of the application.
