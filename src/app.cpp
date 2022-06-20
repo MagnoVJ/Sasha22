@@ -34,10 +34,52 @@ glm::vec3 cameraFront;
 glm::vec3 cameraUp;
 
 // Application Specific opt
-bool opt_spinningCubeSceneDemo = true;
+bool opt_spinningCubeSceneDemo = false;
 bool opt_multipleCubesSceneDemo = false;
 bool opt_navigatingCameraSceneDemo = false;
-bool opt_drawPrimitiveScene = false;
+bool opt_drawPrimitiveScene = true;
+
+// Opts for Draw Primitives (These opts will be moved to drawPrimitiveScene.cpp in the future)
+// For each button in "Primitivas" section, exists an opt
+bool opt_drawPrimitiveScene_point = false;
+bool opt_drawPrimitiveScene_line = false;
+bool opt_drawPrimitiveScene_triangle = false;
+bool opt_drawPrimitiveScene_rect = false;
+bool opt_drawPrimitiveScene_circle = false;
+
+// This function takes a string indicating what primitive you want to draw.
+// It sets all the other primitives options to false
+// (These function will be moved to drawPrimitiveScene.cpp in the future)
+void drawPrimitiveSceneOptConf(std::string optName) {
+
+    opt_drawPrimitiveScene_point = false;
+    opt_drawPrimitiveScene_line = false;
+    opt_drawPrimitiveScene_triangle = false;
+    opt_drawPrimitiveScene_rect = false;
+    opt_drawPrimitiveScene_circle = false;
+
+    int res = -1;
+    res = optName.compare("point");
+    if(res == 0) {
+        opt_drawPrimitiveScene_point = true;   
+    }
+    res = optName.compare("line");
+    if(res == 0) {
+        opt_drawPrimitiveScene_line = true;   
+    }
+    res = optName.compare("triangle");
+    if(res == 0) {
+        opt_drawPrimitiveScene_triangle = true;   
+    }
+    res = optName.compare("rect");
+    if(res == 0) {
+        opt_drawPrimitiveScene_rect = true;   
+    }
+    res = optName.compare("circle");
+    if(res == 0) {
+        opt_drawPrimitiveScene_circle = true;   
+    }
+}
 
 int main() { 
     // glfw: initialize and configure
@@ -276,11 +318,46 @@ int main() {
             
         }
 
-        ImGui::Begin("Opções");
-        //ImGui::Button("Hello");
         //static float value = 0.0f;
         //ImGui::DragFloat("Value", &value);
-        ImGui::End();
+
+        if(opt_drawPrimitiveScene) {
+
+            ImGui::Begin("Primitivas"); 
+            {
+                if(ImGui::Button("Ponto"))
+                    drawPrimitiveSceneOptConf("point");
+                if(ImGui::Button("Linha"))
+                    drawPrimitiveSceneOptConf("line");
+                if(ImGui::Button("Triângulo"))
+                    drawPrimitiveSceneOptConf("triangle");
+                if(ImGui::Button("Retângulo"))
+                    drawPrimitiveSceneOptConf("rect");
+                if(ImGui::Button("Círculo"))
+                    drawPrimitiveSceneOptConf("circle");
+            }
+            ImGui::End();
+
+            ImGui::Begin("Propriedades");
+            {
+                if(opt_drawPrimitiveScene_point) {
+                    static float xPointPos = 0.0f;
+                    static float yPointPos = 0.0f;
+                    ImGui::DragFloat("Coordenada X", &xPointPos);
+                    ImGui::DragFloat("Coordenada Y", &yPointPos);
+                }
+            }
+            ImGui::End();
+
+            ImGui::Begin("Confirmar");
+            {
+                ImGui::Button("Aceitar");
+                ImGui::Button("Cancelar");
+            }
+
+            ImGui::End();
+
+        }
 
         glBindFramebuffer(GL_FRAMEBUFFER, fbo);
         glEnable(GL_DEPTH_TEST); // enable depth testing (is disabled for rendering screen-space quad)
