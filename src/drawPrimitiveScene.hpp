@@ -1,6 +1,5 @@
 #pragma once
 
-#include "shader.h"
 #include "scene.hpp"
 
 #include <glm.hpp>
@@ -9,16 +8,34 @@
 
 #include <glad/glad.h>
 
+#include <imgui.h>
+#include <imgui_impl_glfw.h>
+#include <imgui_impl_opengl3.h>
+
 #include <stdio.h>
 #include <iostream>
+#include <string>
 
 namespace sasha22 {
 
     class DrawPrimitiveScene : Scene {
 
+    private:
+        // Opts for Draw Primitives (These opts will be moved to drawPrimitiveScene.cpp in the future)
+        // For each button in "Primitivas" section, exists an opt
+        bool opt_drawPrimitiveScene_point = false;
+        bool opt_drawPrimitiveScene_line = false;
+        bool opt_drawPrimitiveScene_triangle = false;
+        bool opt_drawPrimitiveScene_rect = false;
+        bool opt_drawPrimitiveScene_circle = false;
+
+        void drawPrimitiveSceneOptConf(std::string optName);
+
+        Shader shd_quad;
+
     public:
         DrawPrimitiveScene();
-        void update_draw();
+        void update_draw(bool opt_drawPrimitiveScene);
 
     };
 }

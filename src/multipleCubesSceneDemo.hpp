@@ -5,6 +5,9 @@
 namespace sasha22 {
 
     class MultipleCuebesSceneDemo : Scene {
+    
+    private:
+        Shader shd_simpleTexturedCube;
 
     public:
         MultipleCuebesSceneDemo();

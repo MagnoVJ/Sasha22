@@ -6,6 +6,9 @@ namespace sasha22 {
     
     class SpinningCubeSceneDemo : Scene {
 
+    private:
+        Shader shd_simpleTexturedCube;
+
     public:
         SpinningCubeSceneDemo();
         ~SpinningCubeSceneDemo();

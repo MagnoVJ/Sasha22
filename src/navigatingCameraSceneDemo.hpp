@@ -21,6 +21,9 @@ namespace sasha22 {
 
     class NavigatingCameraSceneDemo : Scene {
 
+    private:
+        Shader shd_simpleTexturedCube;
+
     public:
         NavigatingCameraSceneDemo();
         ~NavigatingCameraSceneDemo();

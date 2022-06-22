@@ -2,9 +2,8 @@
 
 namespace sasha22 {
 
-    MultipleCuebesSceneDemo::MultipleCuebesSceneDemo() {
-
-        shd = std::make_shared<Shader>("./src/shaders/simpleTexturedCube_vs.glsl", "./src/shaders/simpleTexturedCube_fs.glsl"); // you can name your shader files however you like
+    MultipleCuebesSceneDemo::MultipleCuebesSceneDemo() 
+            : shd_simpleTexturedCube("./src/shaders/simpleTexturedCube_vs.glsl", "./src/shaders/simpleTexturedCube_fs.glsl") {
 
         // set up vertex data (and buffer(s)) and configure vertex attributes
         // ------------------------------------------------------------------
@@ -116,12 +115,11 @@ namespace sasha22 {
 
         // tell opengl for each sampler to which texture unit it belongs to (only has to be done once)
         // -------------------------------------------------------------------------------------------
-        shd->use(); // don't forget to activate/use the shader before setting uniforms!
+        shd_simpleTexturedCube.use(); // don't forget to activate/use the shader before setting uniforms!
         // either set it manually like so:
-        glUniform1i(glGetUniformLocation(shd->ID, "texture1"), 0);
+        glUniform1i(glGetUniformLocation(shd_simpleTexturedCube.ID, "texture1"), 0);
         // or set it via the texture class
-        shd->setInt("texture2", 1);
-
+        shd_simpleTexturedCube.setInt("texture2", 1);
         // You can unbind the VAO afterwards so other VAO calls won't accidentally modify this VAO, but this rarely happens. Modifying other
         // VAOs requires a call to glBindVertexArray anyways so we generally don't unbind VAOs (nor VBOs) when it's not directly necessary.
         // glBindVertexArray(0);
@@ -158,7 +156,7 @@ namespace sasha22 {
         glBindTexture(GL_TEXTURE_2D, texture2);
 
         // activate shader
-        shd->use();
+        shd_simpleTexturedCube.use();
 
         // create transformations
         glm::mat4 view          = glm::mat4(1.0f); // make sure to initialize matrix to identity matrix first
@@ -166,8 +164,8 @@ namespace sasha22 {
         projection = glm::perspective(glm::radians(45.0f), (float)SCR_WIDTH / (float)SCR_HEIGHT, 0.1f, 100.0f);
         view       = glm::translate(view, glm::vec3(0.0f, 0.0f, -3.0f));
         // pass transformation matrices to the shader
-        shd->setMat4("projection", projection); // note: currently we set the projection matrix each frame, but since the projection matrix rarely changes it's often best practice to set it outside the main loop only once.
-        shd->setMat4("view", view);
+        shd_simpleTexturedCube.setMat4("projection", projection); // note: currently we set the projection matrix each frame, but since the projection matrix rarely changes it's often best practice to set it outside the main loop only once.
+        shd_simpleTexturedCube.setMat4("view", view);
 
         // render boxes
         glBindVertexArray(VAO);
@@ -177,8 +175,7 @@ namespace sasha22 {
             model = glm::translate(model, cubePositions[i]);
             float angle = 20.0f * i;
             model = glm::rotate(model, glm::radians(angle), glm::vec3(1.0f, 0.3f, 0.5f));
-            shd->setMat4("model", model);
-
+            shd_simpleTexturedCube.setMat4("model", model);
             glDrawArrays(GL_TRIANGLES, 0, 36);
         }
 

@@ -26,8 +26,6 @@ namespace sasha22 {
         unsigned int VBO, VAO, EBO;
         unsigned int texture1, texture2;
 
-        std::shared_ptr<Shader> shd;
-
     };
 
 }
