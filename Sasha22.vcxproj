@@ -158,8 +158,6 @@
     <ClCompile Include="dependencies\imgui\backends\imgui_impl_opengl3.cpp" />
     <ClCompile Include="src\stb_image.cpp" />
     <ClCompile Include="src\spinningCubeSceneDemo.cpp" />
-    <ClCompile Include="src\multipleCubesSceneDemo.cpp" />
-    <ClCompile Include="src\navigatingCameraSceneDemo.cpp" />
     <ClCompile Include="src\drawPrimitiveScene.cpp" />
     <ClCompile Include="src\app.cpp" />
   </ItemGroup>

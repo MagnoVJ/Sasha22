@@ -26,6 +26,9 @@ namespace sasha22 {
         unsigned int VBO, VAO, EBO;
         unsigned int texture1, texture2;
 
+    public:
+        virtual void update_draw() = 0;
+
     };
 
 }

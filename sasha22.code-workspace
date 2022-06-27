@@ -6,7 +6,7 @@
 	],
 	"settings": {
 		"files.associations": {
-			"ostream": "cpp",
+			"memory": "cpp",
 			"algorithm": "cpp",
 			"atomic": "cpp",
 			"bit": "cpp",
@@ -36,8 +36,9 @@
 			"limits": "cpp",
 			"list": "cpp",
 			"locale": "cpp",
-			"memory": "cpp",
+			"map": "cpp",
 			"new": "cpp",
+			"ostream": "cpp",
 			"sstream": "cpp",
 			"stdexcept": "cpp",
 			"streambuf": "cpp",
@@ -63,6 +64,7 @@
 			"xstddef": "cpp",
 			"xstring": "cpp",
 			"xtr1common": "cpp",
+			"xtree": "cpp",
 			"xutility": "cpp"
 		}
 	}

@@ -18,7 +18,7 @@
 
 namespace sasha22 {
 
-    class DrawPrimitiveScene : Scene {
+    class DrawPrimitiveScene : public Scene {
 
     private:
         // Opts for Draw Primitives (These opts will be moved to drawPrimitiveScene.cpp in the future)
@@ -35,7 +35,7 @@ namespace sasha22 {
 
     public:
         DrawPrimitiveScene();
-        void update_draw(bool opt_drawPrimitiveScene);
+        void update_draw();
 
     };
 }

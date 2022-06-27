@@ -1,4 +1,10 @@
 //https://solarianprogrammer.com/2013/05/13/opengl-101-drawing-primitives/
+/*
+    For tomorrow 06/24/2022: Implement Drawing point. You'll have to instantiate the temporary variables/values in the heap (pointers)
+    // you'll work with flags, you will verify everytime if these flags are true/false and clean these temporary variables/values based on the flags
+    // exemple opt_drawPrimitive_point if its changing from true to false, clean these variables
+
+*/
 
 #include "drawPrimitiveScene.hpp"
 
@@ -34,45 +40,43 @@ namespace sasha22 {
 
     }
 
-    void DrawPrimitiveScene::update_draw(bool opt_drawPrimitiveScene) {
+    void DrawPrimitiveScene::update_draw() {
 
-        if(opt_drawPrimitiveScene) {
+        // std::unique_ptr<float> uPtr_xPointPos = std::unique_ptr<float>(new float(0));
 
-            ImGui::Begin("Primitivas"); 
-            {
-                if(ImGui::Button("Ponto"))
-                    drawPrimitiveSceneOptConf("point");
-                if(ImGui::Button("Linha"))
-                    drawPrimitiveSceneOptConf("line");
-                if(ImGui::Button("Triângulo"))
-                    drawPrimitiveSceneOptConf("triangle");
-                if(ImGui::Button("Retângulo"))
-                    drawPrimitiveSceneOptConf("rect");
-                if(ImGui::Button("Círculo"))
-                    drawPrimitiveSceneOptConf("circle");
-            }
-            ImGui::End();
-
-            ImGui::Begin("Propriedades");
-            {
-                if(opt_drawPrimitiveScene_point) {
-                    static float xPointPos = 0.0f;
-                    static float yPointPos = 0.0f;
-                    ImGui::DragFloat("Coordenada X", &xPointPos);
-                    ImGui::DragFloat("Coordenada Y", &yPointPos);
-                }
-            }
-            ImGui::End();
-
-            ImGui::Begin("Confirmação");
-            {
-                ImGui::Button("Confirmar");
-                ImGui::Button("Cancelar");
-            }
-
-            ImGui::End();
-
+        ImGui::Begin("Primitivas"); 
+        {
+            if(ImGui::Button("Ponto"))
+                drawPrimitiveSceneOptConf("point");
+            if(ImGui::Button("Linha"))
+                drawPrimitiveSceneOptConf("line");
+            if(ImGui::Button("Triângulo"))
+                drawPrimitiveSceneOptConf("triangle");
+            if(ImGui::Button("Retângulo"))
+                drawPrimitiveSceneOptConf("rect");
+            if(ImGui::Button("Círculo"))
+                drawPrimitiveSceneOptConf("circle");
         }
+        ImGui::End();
+
+        ImGui::Begin("Propriedades");
+        {
+            if(opt_drawPrimitiveScene_point) {
+                static float xPointPos = 0.0f;
+                static float yPointPos = 0.0f;
+                ImGui::DragFloat("Coordenada X", &xPointPos);
+                ImGui::DragFloat("Coordenada Y", &yPointPos);
+            }
+        }
+        ImGui::End();
+
+        ImGui::Begin("Confirmação");
+        {
+            ImGui::Button("Confirmar");
+            ImGui::Button("Cancelar");
+        }
+
+        ImGui::End();        
 
         glm::mat4 transform = glm::mat4(1.0f);
         transform = glm::scale(transform, glm::vec3(1.0f, 1.0f, 1.0f));

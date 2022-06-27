@@ -1,6 +1,3 @@
-// To do:
-// You cannot render ImGUI all the time, only when you update something
-
 #include "sasha22.hpp"
 
 #include <stb_image.h>
@@ -11,38 +8,33 @@
 
 #include <stdio.h> 
 #include <iostream>
+#include <string>
+#include <memory>
+#include <map>
+#include <utility>
 
 void framebuffer_size_callback(GLFWwindow* window, int width, int height);
 void processInput(GLFWwindow *window);
 
-void mouse_callback(GLFWwindow* window, double xposIn, double yposIn);
-void scroll_callback(GLFWwindow* window, double xoffset, double yoffset);
+int main(int argc, char* argv[]) { 
 
-// settings
-const unsigned int SCR_WIDTH = 1366;
-const unsigned int SCR_HEIGHT = 768;
+    // settings
+    const unsigned int SCR_WIDTH = 1366;
+    const unsigned int SCR_HEIGHT = 768;
 
-float deltaTime = 0.0f;
-float lastFrame = 0.0f;
+    float deltaTime = 0.0f;
+    float lastFrame = 0.0f;
 
-bool firstMouse = true;
-float yaw       = -90.0f;
-float pitch     = 0.0f;
-float lastX     = 800.0f / 2.0;
-float lastY     = 600.0 / 2.0;
-float fov       = 45.0f;
+    std::map<std::string, std::shared_ptr<sasha22::Scene>> mapOfScenes;
 
-glm::vec3 cameraPos;
-glm::vec3 cameraFront;
-glm::vec3 cameraUp;
+    // Application Specific opt
+    bool opt_spinningCubeSceneDemo = true;
+    bool opt_drawPrimitiveScene = false;
 
-// Application Specific opt
-bool opt_spinningCubeSceneDemo = false;
-bool opt_multipleCubesSceneDemo = false;
-bool opt_navigatingCameraSceneDemo = false;
-bool opt_drawPrimitiveScene = true;
+    enum SceneOption {SPINNING_CUBE_SCENE_DEMO, DRAW_PRIMITIVE_SCENE};
 
-int main() { 
+    SceneOption scene_option = SPINNING_CUBE_SCENE_DEMO;
+
     // glfw: initialize and configure
     // ------------------------------
     glfwInit();
@@ -68,8 +60,6 @@ int main() {
     glfwSwapInterval(1); // Enable vsync
     glfwMaximizeWindow(window);
     glfwSetFramebufferSizeCallback(window, framebuffer_size_callback);
-    glfwSetCursorPosCallback(window, mouse_callback);
-    glfwSetScrollCallback(window, scroll_callback);
 
     // Setup Dear ImGui context
     IMGUI_CHECKVERSION();
@@ -111,18 +101,29 @@ int main() {
     glEnable(GL_DEPTH_TEST);
 
     // Here you create an instance of the class that represents the functionality(menu) you're using/wants to include
-    sasha22::SpinningCubeSceneDemo spinningCubeSceneDemo;
-    sasha22::MultipleCuebesSceneDemo multipleCubesSceneDemo;
-    sasha22::NavigatingCameraSceneDemo navigatingCameraSceneDemo;
-    sasha22::DrawPrimitiveScene drawPrimitiveScene;
+    // sasha22::SpinningCubeSceneDemo spinningCubeSceneDemo;
+    // sasha22::MultipleCuebesSceneDemo multipleCubesSceneDemo;
+    // sasha22::NavigatingCameraSceneDemo navigatingCameraSceneDemo;
+    // sasha22::DrawPrimitiveScene drawPrimitiveScene;
+
+    std::shared_ptr<sasha22::Scene> ptr_Scene;
+
+    switch(scene_option) {
+        case SceneOption::SPINNING_CUBE_SCENE_DEMO:
+            ptr_Scene = std::shared_ptr<sasha22::Scene>(new sasha22::SpinningCubeSceneDemo());
+            mapOfScenes.insert(std::pair<std::string, std::shared_ptr<sasha22::Scene>>("PTR_SC_IDX", ptr_Scene));
+            break;
+        case SceneOption::DRAW_PRIMITIVE_SCENE:
+            ptr_Scene = std::shared_ptr<sasha22::Scene>(new sasha22::DrawPrimitiveScene());
+            mapOfScenes.insert(std::pair<std::string, std::shared_ptr<sasha22::Scene>>("PTR_DP_IDX", ptr_Scene));
+            break;
+        default:
+            break;
+    }
 
     unsigned int fbo;
     glGenFramebuffers(1, &fbo);
     glBindFramebuffer(GL_FRAMEBUFFER, fbo);
-
-    // unsigned int texture;
-    // glGenTextures(1, &texture);
-    // glBindTexture(GL_TEXTURE_2D, texture);
   
     // Generate texture
     unsigned int textureColorbuffer;
@@ -146,11 +147,8 @@ int main() {
 
     if(glCheckFramebufferStatus(GL_FRAMEBUFFER) != GL_FRAMEBUFFER_COMPLETE)
 	    std::cout << "ERROR::FRAMEBUFFER:: Framebuffer is not complete!" << std::endl;
-    glBindFramebuffer(GL_FRAMEBUFFER, 0);  
-
-    cameraPos   = glm::vec3(0.0f, 0.0f, 3.0f);
-    cameraFront = glm::vec3(0.0f, 0.0f, -1.0f);
-    cameraUp    = glm::vec3(0.0f, 1.0f, 0.0f);
+    
+    glBindFramebuffer(GL_FRAMEBUFFER, 0);
 
     // Render loop
     while (!glfwWindowShouldClose(window)) {
@@ -161,9 +159,6 @@ int main() {
 
         // input
         processInput(window);
-        
-        if(opt_navigatingCameraSceneDemo)
-            navigatingCameraSceneDemo.processInput(window, deltaTime, cameraPos, cameraFront, cameraUp);
 
         // Start the Dear ImGui frame
         ImGui_ImplOpenGL3_NewFrame();
@@ -214,7 +209,6 @@ int main() {
         // Submit the DockSpace
         ImGuiIO& io = ImGui::GetIO();
         if (io.ConfigFlags & ImGuiConfigFlags_DockingEnable) {
-
             ImGuiID dockspace_id = ImGui::GetID("MyDockSpace");
             ImGui::DockSpace(dockspace_id, ImVec2(0.0f, 0.0f), dockspace_flags);
         }
@@ -226,32 +220,14 @@ int main() {
                 bool lastState = opt_drawPrimitiveScene;
                 ImGui::MenuItem("Desenhar", NULL, &opt_drawPrimitiveScene);
                 if(lastState != opt_drawPrimitiveScene) {
+                    scene_option = SceneOption::SPINNING_CUBE_SCENE_DEMO;
                     opt_spinningCubeSceneDemo = false;
-                    opt_multipleCubesSceneDemo = false;
-                    opt_navigatingCameraSceneDemo = false;
                 }
 
                 lastState = opt_spinningCubeSceneDemo;
                 ImGui::MenuItem("Cubo Girando (Demonstração)", NULL, &opt_spinningCubeSceneDemo);
                 if(lastState != opt_spinningCubeSceneDemo) {
-                    opt_multipleCubesSceneDemo = false;
-                    opt_navigatingCameraSceneDemo = false;
-                    opt_drawPrimitiveScene = false;
-                }
-
-                lastState = opt_multipleCubesSceneDemo;
-                ImGui::MenuItem("Vários Cubos (Demonstração)", NULL, &opt_multipleCubesSceneDemo);
-                if(lastState != opt_multipleCubesSceneDemo) {
-                    opt_spinningCubeSceneDemo = false;
-                    opt_navigatingCameraSceneDemo = false;
-                    opt_drawPrimitiveScene = false;
-                }
-
-                lastState = opt_navigatingCameraSceneDemo;
-                ImGui::MenuItem("Navegar Entre os Cubos (Demonstração)", NULL, &opt_navigatingCameraSceneDemo);
-                if(lastState != opt_navigatingCameraSceneDemo) {
-                    opt_spinningCubeSceneDemo = false;
-                    opt_multipleCubesSceneDemo = false;
+                    scene_option = SceneOption::DRAW_PRIMITIVE_SCENE;
                     opt_drawPrimitiveScene = false;
                 }
 
@@ -260,7 +236,6 @@ int main() {
             }
 
             if (ImGui::BeginMenu("Configurações")) {
-
                 // Disabling fullscreen would allow the window to be moved to the front of other windows,
                 // which we can't undo at the moment without finer window depth/z control.
                 // ImGui::MenuItem("Tela Cheia", NULL, &opt_fullscreen);
@@ -284,21 +259,23 @@ int main() {
 
         // render
         // ------
-        //int display_w, display_h;
-        //glfwGetFramebufferSize(window, &display_w, &display_h);
         glViewport(0, 0, SCR_WIDTH, SCR_HEIGHT);
         glClearColor(0.2f, 0.3f, 0.3f, 1.0f);
         glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT); // also clear the depth buffer now!
 
         // Drawing the viewport of specific functionality
-        if(opt_spinningCubeSceneDemo)
-            spinningCubeSceneDemo.update_draw();
-        else if(opt_multipleCubesSceneDemo)
-            multipleCubesSceneDemo.update_draw();
-        else if(opt_navigatingCameraSceneDemo)
-            navigatingCameraSceneDemo.update_draw(cameraPos, cameraFront, cameraUp, fov);
-        else if(opt_drawPrimitiveScene)
-            drawPrimitiveScene.update_draw(opt_drawPrimitiveScene);
+        // if(opt_spinningCubeSceneDemo) {
+        //     // This is just to demonstrate
+        //     ImGui::Begin("Propriedades");
+        //     ImGui::End();
+        //     spinningCubeSceneDemo.update_draw();
+        // }
+        // else if(opt_drawPrimitiveScene)
+        //     drawPrimitiveScene.update_draw();
+        switch(scene_option) {
+            case SceneOption::SPINNING_CUBE_SCENE_DEMO:
+            
+        }
 
          // Now bind back to default framebuffer and draw a quad plane with the attached framebuffer color texture
         glBindFramebuffer(GL_FRAMEBUFFER, 0);
@@ -332,8 +309,7 @@ int main() {
             glfwMakeContextCurrent(backup_current_context);
         }
         
-        // glBindVertexArray(0); // no need to unbind it every time 
- 
+        // glBindVertexArray(0); // no need to unbind it every time  
         // glfw: swap buffers and poll IO events (keys pressed/released, mouse moved etc.)
         // -------------------------------------------------------------------------------
         glfwSwapBuffers(window);
@@ -345,8 +321,6 @@ int main() {
     ImGui_ImplGlfw_Shutdown();
     ImGui::DestroyContext();
 
-    // glfw: terminate, clearing all previously allocated GLFW resources.
-    // ------------------------------------------------------------------
     glfwDestroyWindow(window);
     glfwTerminate();
     return 0;
@@ -365,53 +339,4 @@ void framebuffer_size_callback(GLFWwindow* window, int width, int height) {
     // make sure the viewport matches the new window dimensions; note that width and 
     // height will be significantly larger than specified on retina displays.
     glViewport(0, 0, width, height);
-}
-
-void mouse_callback(GLFWwindow* window, double xposIn, double yposIn) {
-
-    if(opt_navigatingCameraSceneDemo) {
-        float xpos = static_cast<float>(xposIn);
-        float ypos = static_cast<float>(yposIn);
-
-        if(firstMouse) {
-            lastX = xpos;
-            lastY = ypos;
-            firstMouse = false;
-        }
-
-        float xoffset = xpos - lastX;
-        float yoffset = lastY - ypos;
-        lastX = xpos;
-        lastY = ypos;
-
-        float sensitivity = 0.1f;
-        xoffset *= sensitivity;
-        yoffset *= sensitivity;
-
-        yaw += xoffset;
-        pitch += yoffset;
-
-        if(pitch > 89.0f)
-            pitch = 89.0f;
-        if(pitch < -89.0f)
-            pitch = -89.0f;
-
-        glm::vec3 front;
-        front.x = cos(glm::radians(yaw)) * cos(glm::radians(pitch));
-        front.y = sin(glm::radians(pitch));
-        front.z = sin(glm::radians(yaw)) * cos(glm::radians(pitch));
-        cameraFront = glm::normalize(front);
-
-    }
-    
-}
-
-void scroll_callback(GLFWwindow* window, double xoffset, double yoffset) {
-    if(opt_navigatingCameraSceneDemo) {
-        fov -= (float)yoffset;
-        if(fov < 1.0f)
-            fov = 1.0f;
-        if(fov > 45.0f)
-            fov = 45.0f;
-    }
 }
