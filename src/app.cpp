@@ -25,15 +25,11 @@ int main(int argc, char* argv[]) {
     float deltaTime = 0.0f;
     float lastFrame = 0.0f;
 
-    std::map<std::string, std::shared_ptr<sasha22::Scene>> mapOfScenes;
-
     // Application Specific opt
     bool opt_spinningCubeSceneDemo = true;
     bool opt_drawPrimitiveScene = false;
 
     enum SceneOption {SPINNING_CUBE_SCENE_DEMO, DRAW_PRIMITIVE_SCENE};
-
-    SceneOption scene_option = SPINNING_CUBE_SCENE_DEMO;
 
     // glfw: initialize and configure
     // ------------------------------
@@ -100,26 +96,12 @@ int main(int argc, char* argv[]) {
 
     glEnable(GL_DEPTH_TEST);
 
-    // Here you create an instance of the class that represents the functionality(menu) you're using/wants to include
-    // sasha22::SpinningCubeSceneDemo spinningCubeSceneDemo;
-    // sasha22::MultipleCuebesSceneDemo multipleCubesSceneDemo;
-    // sasha22::NavigatingCameraSceneDemo navigatingCameraSceneDemo;
-    // sasha22::DrawPrimitiveScene drawPrimitiveScene;
-
-    std::shared_ptr<sasha22::Scene> ptr_Scene;
-
-    switch(scene_option) {
-        case SceneOption::SPINNING_CUBE_SCENE_DEMO:
-            ptr_Scene = std::shared_ptr<sasha22::Scene>(new sasha22::SpinningCubeSceneDemo());
-            mapOfScenes.insert(std::pair<std::string, std::shared_ptr<sasha22::Scene>>("PTR_SC_IDX", ptr_Scene));
-            break;
-        case SceneOption::DRAW_PRIMITIVE_SCENE:
-            ptr_Scene = std::shared_ptr<sasha22::Scene>(new sasha22::DrawPrimitiveScene());
-            mapOfScenes.insert(std::pair<std::string, std::shared_ptr<sasha22::Scene>>("PTR_DP_IDX", ptr_Scene));
-            break;
-        default:
-            break;
-    }
+    // In order to change the start-up scene, scene_option must be changed, the ptr_Scene must initialized with the pointer of the new scene
+    // and the index of mapOfScenes must be changed as well.
+    SceneOption scene_option = SPINNING_CUBE_SCENE_DEMO;
+    auto ptr_Scene = std::shared_ptr<sasha22::Scene>(new sasha22::SpinningCubeSceneDemo());
+    std::map<std::string, std::shared_ptr<sasha22::Scene>> mapOfScenes;
+    mapOfScenes.insert(std::pair<std::string, std::shared_ptr<sasha22::Scene>>("PTR_SC_IDX", ptr_Scene));
 
     unsigned int fbo;
     glGenFramebuffers(1, &fbo);
@@ -220,15 +202,33 @@ int main(int argc, char* argv[]) {
                 bool lastState = opt_drawPrimitiveScene;
                 ImGui::MenuItem("Desenhar", NULL, &opt_drawPrimitiveScene);
                 if(lastState != opt_drawPrimitiveScene) {
-                    scene_option = SceneOption::SPINNING_CUBE_SCENE_DEMO;
+                    
+                    scene_option = SceneOption::DRAW_PRIMITIVE_SCENE;
                     opt_spinningCubeSceneDemo = false;
+                    
+                    // First we verify if there is an existing DRAW_PRIMITIVE_SCENE inside mapOfScenes
+                    // If there is not one, we do what we've done in the begenning, we create a new DrawPrimitiveScene and add it to mapOfScenes
+                    if(mapOfScenes.count("PTR_DP_IDX")) 
+                        ptr_Scene = mapOfScenes["PTR_DP_IDX"];
+                    else {
+                        ptr_Scene = std::shared_ptr<sasha22::Scene>(new sasha22::DrawPrimitiveScene());
+                        mapOfScenes.insert(std::pair<std::string, std::shared_ptr<sasha22::Scene>>("PTR_DP_IDX", ptr_Scene));
+                    }
                 }
 
                 lastState = opt_spinningCubeSceneDemo;
                 ImGui::MenuItem("Cubo Girando (Demonstração)", NULL, &opt_spinningCubeSceneDemo);
                 if(lastState != opt_spinningCubeSceneDemo) {
-                    scene_option = SceneOption::DRAW_PRIMITIVE_SCENE;
+                    
+                    scene_option = SceneOption::SPINNING_CUBE_SCENE_DEMO;
                     opt_drawPrimitiveScene = false;
+
+                    if(mapOfScenes.count("PTR_SC_IDX"))
+                        ptr_Scene = mapOfScenes["PTR_SC_IDX"];
+                    else {
+                        ptr_Scene = std::shared_ptr<sasha22::Scene>(new sasha22::SpinningCubeSceneDemo());
+                        mapOfScenes.insert(std::pair<std::string, std::shared_ptr<sasha22::Scene>>("PTR_SC_IDX", ptr_Scene));
+                    }
                 }
 
                 ImGui::EndMenu();
@@ -272,10 +272,7 @@ int main(int argc, char* argv[]) {
         // }
         // else if(opt_drawPrimitiveScene)
         //     drawPrimitiveScene.update_draw();
-        switch(scene_option) {
-            case SceneOption::SPINNING_CUBE_SCENE_DEMO:
-            
-        }
+        ptr_Scene->update_draw();
 
          // Now bind back to default framebuffer and draw a quad plane with the attached framebuffer color texture
         glBindFramebuffer(GL_FRAMEBUFFER, 0);

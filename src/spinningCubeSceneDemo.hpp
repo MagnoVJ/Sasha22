@@ -13,7 +13,7 @@ namespace sasha22 {
         SpinningCubeSceneDemo();
         ~SpinningCubeSceneDemo();
 
-        void update_draw();
+        void update_draw() override;
 
     };
 

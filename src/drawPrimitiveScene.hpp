@@ -31,11 +31,13 @@ namespace sasha22 {
 
         void drawPrimitiveSceneOptConf(std::string optName);
 
+        void cleanUp_opt_drawPrimitiveScene_point_variables();
+
         Shader shd_quad;
 
     public:
         DrawPrimitiveScene();
-        void update_draw();
+        void update_draw() override;
 
     };
 }
