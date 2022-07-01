@@ -3,22 +3,22 @@
 namespace sasha22 {
 
     SpinningCubeSceneDemo::SpinningCubeSceneDemo() 
-            : shd_simpleTexturedCube("./src/shaders/simpleTexturedCube_vs.glsl", "./src/shaders/simpleTexturedCube_fs.glsl"){
+            : shd_simpleTexturedCube("./src/shaders/simpleTexturedCube_vs.glsl", "./src/shaders/simpleTexturedCube_fs.glsl") {
 
         // set up vertex data (and buffer(s)) and configure vertex attributes
         // ------------------------------------------------------------------
         float vertices[] = {
             -0.5f, -0.5f, -0.5f,  0.0f, 0.0f,
-            0.5f, -0.5f, -0.5f,  1.0f, 0.0f,
-            0.5f,  0.5f, -0.5f,  1.0f, 1.0f,
-            0.5f,  0.5f, -0.5f,  1.0f, 1.0f,
+             0.5f, -0.5f, -0.5f,  1.0f, 0.0f,
+             0.5f,  0.5f, -0.5f,  1.0f, 1.0f,
+             0.5f,  0.5f, -0.5f,  1.0f, 1.0f,
             -0.5f,  0.5f, -0.5f,  0.0f, 1.0f,
             -0.5f, -0.5f, -0.5f,  0.0f, 0.0f,
 
             -0.5f, -0.5f,  0.5f,  0.0f, 0.0f,
-            0.5f, -0.5f,  0.5f,  1.0f, 0.0f,
-            0.5f,  0.5f,  0.5f,  1.0f, 1.0f,
-            0.5f,  0.5f,  0.5f,  1.0f, 1.0f,
+             0.5f, -0.5f,  0.5f,  1.0f, 0.0f,
+             0.5f,  0.5f,  0.5f,  1.0f, 1.0f,
+             0.5f,  0.5f,  0.5f,  1.0f, 1.0f,
             -0.5f,  0.5f,  0.5f,  0.0f, 1.0f,
             -0.5f, -0.5f,  0.5f,  0.0f, 0.0f,
 
@@ -135,6 +135,12 @@ namespace sasha22 {
 
     void SpinningCubeSceneDemo::update_draw() {
 
+        ImGui::Begin("Bem-Vindo!");
+        {
+            ImGui::Text("             Seja Bem-Vindo ao Sasha22!\n\nSasha22 é uma ferramenta para trabalhar com as mais\ndiversas aplicações gráficas 2D ou 3D.");
+        }
+        ImGui::End();
+
         glActiveTexture(GL_TEXTURE0);
         glBindTexture(GL_TEXTURE_2D, texture1);
         glActiveTexture(GL_TEXTURE1);
@@ -164,5 +170,4 @@ namespace sasha22 {
         glDrawArrays(GL_TRIANGLES, 0, 36);
 
     }
-
 }

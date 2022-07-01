@@ -3,7 +3,6 @@
     For tomorrow 06/24/2022: Implement Drawing point. You'll have to instantiate the temporary variables/values in the heap (pointers)
     // you'll work with flags, you will verify everytime if these flags are true/false and clean these temporary variables/values based on the flags
     // exemple opt_drawPrimitive_point if its changing from true to false, clean these variables
-
 */
 
 #include "drawPrimitiveScene.hpp"
@@ -37,12 +36,9 @@ namespace sasha22 {
         glEnableVertexAttribArray(0);
         glBindBuffer(GL_ARRAY_BUFFER, 0);
         glBindVertexArray(0);
-
     }
 
     void DrawPrimitiveScene::update_draw() {
-
-        // std::unique_ptr<float> uPtr_xPointPos = std::unique_ptr<float>(new float(0));
 
         ImGui::Begin("Primitivas"); 
         {
