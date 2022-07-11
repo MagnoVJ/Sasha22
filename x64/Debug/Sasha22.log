@@ -1,0 +1,3 @@
+﻿  spinningCubeSceneDemo.cpp
+C:\Users\MagnoVJ\Documents\SASHA22\src\spinningCubeSceneDemo.cpp(21,41): warning C4101: 'e': unreferenced local variable
+  Sasha22.vcxproj -> C:\Users\MagnoVJ\Documents\SASHA22\x64\Debug\Sasha22.exe

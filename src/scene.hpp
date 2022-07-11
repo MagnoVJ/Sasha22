@@ -18,6 +18,9 @@
 #include <stdio.h>
 #include <iostream>
 #include <memory>
+#include <fstream>
+#include <sstream>
+#include <string>
 
 namespace sasha22 {
 

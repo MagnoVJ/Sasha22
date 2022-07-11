@@ -5,6 +5,23 @@ namespace sasha22 {
     SpinningCubeSceneDemo::SpinningCubeSceneDemo() 
             : shd_simpleTexturedCube("./src/shaders/simpleTexturedCube_vs.glsl", "./src/shaders/simpleTexturedCube_fs.glsl") {
 
+        // Reading file
+        std::ifstream cubeFile;
+        std::string cubeFileString;
+
+        cubeFile.exceptions(std::ifstream::failbit | std::ifstream::badbit);
+
+        try {
+            cubeFile.open("./cube.sgf");
+            std::stringstream cubeStringStream;
+            cubeStringStream << cubeFile.rdbuf();
+            cubeFile.close();
+            cubeFileString = cubeStringStream.str();
+            std::cout << "stop here";
+        } catch(std::ifstream::failure& e) {
+            std::cout << "ERROR::COULDN'T READ CUBE GEOMETRY FILE" << std::endl;
+        }
+
         // set up vertex data (and buffer(s)) and configure vertex attributes
         // ------------------------------------------------------------------
         float vertices[] = {
