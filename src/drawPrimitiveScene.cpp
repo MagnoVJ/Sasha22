@@ -93,25 +93,19 @@ namespace sasha22 {
         opt_drawPrimitiveScene_rect = false;
         opt_drawPrimitiveScene_circle = false;
 
-        int res = -1;
-        res = optName.compare("point");
-        if(res == 0) {
+        if(!optName.compare("point")) {
             opt_drawPrimitiveScene_point = true;   
         }
-        res = optName.compare("line");
-        if(res == 0) {
+        if(!optName.compare("line")) {
             opt_drawPrimitiveScene_line = true;   
         }
-        res = optName.compare("triangle");
-        if(res == 0) {
+        if(!optName.compare("triangle")) {
             opt_drawPrimitiveScene_triangle = true;   
         }
-        res = optName.compare("rect");
-        if(res == 0) {
+        if(!optName.compare("rect")) {
             opt_drawPrimitiveScene_rect = true;   
         }
-        res = optName.compare("circle");
-        if(res == 0) {
+        if(!optName.compare("circle")) {
             opt_drawPrimitiveScene_circle = true;   
         }
     }

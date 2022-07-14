@@ -25,6 +25,9 @@ namespace sasha22 {
         bool opt_drawPrimitiveScene_rect = false;
         bool opt_drawPrimitiveScene_circle = false;
 
+        // Variable for the lock system
+        bool locked = false;
+
         void drawPrimitiveSceneOptConf(std::string optName);
 
         void cleanUp_opt_drawPrimitiveScene_point_variables();

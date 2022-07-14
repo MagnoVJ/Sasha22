@@ -5,6 +5,11 @@ namespace sasha22 {
     SpinningCubeSceneDemo::SpinningCubeSceneDemo() 
             : shd_simpleTexturedCube("./src/shaders/simpleTexturedCube_vs.glsl", "./src/shaders/simpleTexturedCube_fs.glsl") {
 
+        // set up vertex data (and buffer(s)) and configure vertex attributes
+        // ------------------------------------------------------------------
+        float vertices[180];
+        int i = 0;
+
         // Reading file
         std::ifstream cubeFile;
         std::string cubeFileString;
@@ -12,61 +17,37 @@ namespace sasha22 {
         cubeFile.exceptions(std::ifstream::failbit | std::ifstream::badbit);
 
         try {
+
             cubeFile.open("./cube.sgf");
             std::stringstream cubeStringStream;
             cubeStringStream << cubeFile.rdbuf();
             cubeFile.close();
             cubeFileString = cubeStringStream.str();
-            std::cout << "stop here";
+
+            for(auto it = cubeFileString.cbegin(); it != cubeFileString.cend(); ++it) {
+
+                if(*it == '{') {
+
+                    while(*it != '}') {
+                        ++it;
+                        std::stringstream ss;
+                        while(*it != ',' && *it != ' ' && *it != '\n' && *it != '}') {
+                            ss << *it;
+                            ++it;
+                        }
+                        std::string s = ss.str();
+                        if(s != "") {
+                            vertices[i] = std::stof(s);
+                            i++;
+                        }
+
+                    }   
+                }
+            }
+
         } catch(std::ifstream::failure& e) {
             std::cout << "ERROR::COULDN'T READ CUBE GEOMETRY FILE" << std::endl;
         }
-
-        // set up vertex data (and buffer(s)) and configure vertex attributes
-        // ------------------------------------------------------------------
-        float vertices[] = {
-            -0.5f, -0.5f, -0.5f,  0.0f, 0.0f,
-             0.5f, -0.5f, -0.5f,  1.0f, 0.0f,
-             0.5f,  0.5f, -0.5f,  1.0f, 1.0f,
-             0.5f,  0.5f, -0.5f,  1.0f, 1.0f,
-            -0.5f,  0.5f, -0.5f,  0.0f, 1.0f,
-            -0.5f, -0.5f, -0.5f,  0.0f, 0.0f,
-
-            -0.5f, -0.5f,  0.5f,  0.0f, 0.0f,
-             0.5f, -0.5f,  0.5f,  1.0f, 0.0f,
-             0.5f,  0.5f,  0.5f,  1.0f, 1.0f,
-             0.5f,  0.5f,  0.5f,  1.0f, 1.0f,
-            -0.5f,  0.5f,  0.5f,  0.0f, 1.0f,
-            -0.5f, -0.5f,  0.5f,  0.0f, 0.0f,
-
-            -0.5f,  0.5f,  0.5f,  1.0f, 0.0f,
-            -0.5f,  0.5f, -0.5f,  1.0f, 1.0f,
-            -0.5f, -0.5f, -0.5f,  0.0f, 1.0f,
-            -0.5f, -0.5f, -0.5f,  0.0f, 1.0f,
-            -0.5f, -0.5f,  0.5f,  0.0f, 0.0f,
-            -0.5f,  0.5f,  0.5f,  1.0f, 0.0f,
-
-            0.5f,  0.5f,  0.5f,  1.0f, 0.0f,
-            0.5f,  0.5f, -0.5f,  1.0f, 1.0f,
-            0.5f, -0.5f, -0.5f,  0.0f, 1.0f,
-            0.5f, -0.5f, -0.5f,  0.0f, 1.0f,
-            0.5f, -0.5f,  0.5f,  0.0f, 0.0f,
-            0.5f,  0.5f,  0.5f,  1.0f, 0.0f,
-
-            -0.5f, -0.5f, -0.5f,  0.0f, 1.0f,
-            0.5f, -0.5f, -0.5f,  1.0f, 1.0f,
-            0.5f, -0.5f,  0.5f,  1.0f, 0.0f,
-            0.5f, -0.5f,  0.5f,  1.0f, 0.0f,
-            -0.5f, -0.5f,  0.5f,  0.0f, 0.0f,
-            -0.5f, -0.5f, -0.5f,  0.0f, 1.0f,
-
-            -0.5f,  0.5f, -0.5f,  0.0f, 1.0f,
-            0.5f,  0.5f, -0.5f,  1.0f, 1.0f,
-            0.5f,  0.5f,  0.5f,  1.0f, 0.0f,
-            0.5f,  0.5f,  0.5f,  1.0f, 0.0f,
-            -0.5f,  0.5f,  0.5f,  0.0f, 0.0f,
-            -0.5f,  0.5f, -0.5f,  0.0f, 1.0f
-        };
 
         glGenVertexArrays(1, &VAO);
         glGenBuffers(1, &VBO);
