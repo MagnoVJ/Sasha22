@@ -153,6 +153,7 @@
     <ClCompile Include="src\stb_image.cpp" />
     <ClCompile Include="src\spinningCubeSceneDemo.cpp" />
     <ClCompile Include="src\drawPrimitiveScene.cpp" />
+    <ClCompile Include="src\sasha22.cpp" />
     <ClCompile Include="src\app.cpp" />
   </ItemGroup>
   <ItemGroup>

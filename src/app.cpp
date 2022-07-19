@@ -96,7 +96,7 @@ int main(int argc, char* argv[]) {
 
     glEnable(GL_DEPTH_TEST);
 
-    // In order to change the start-up scene, scene_option must be changed, the ptr_Scene must initialized with the pointer of the new scene
+    // In order to change the start-up scene, scene_option must be changed, the ptr_Scene must be initialized with the pointer of the new scene
     // and the index of mapOfScenes must be changed as well.
     SceneOption scene_option = SPINNING_CUBE_SCENE_DEMO;
     auto ptr_Scene = std::shared_ptr<sasha22::Scene>(new sasha22::SpinningCubeSceneDemo());
@@ -167,7 +167,7 @@ int main(int argc, char* argv[]) {
         }
         else {
             dockspace_flags &= ~ImGuiDockNodeFlags_PassthruCentralNode;
-        }
+        }           
 
         // When using ImGuiDockNodeFlags_PassthruCentralNode, DockSpace() will render our background
         // and handle the pass-thru hole, so we ask Begin() to not render a background.
@@ -203,16 +203,20 @@ int main(int argc, char* argv[]) {
                 ImGui::MenuItem("Desenhar", NULL, &opt_drawPrimitiveScene);
                 if(lastState != opt_drawPrimitiveScene) {
                     
-                    scene_option = SceneOption::DRAW_PRIMITIVE_SCENE;
-                    opt_spinningCubeSceneDemo = false;
-                    
-                    // First we verify if there is an existing DRAW_PRIMITIVE_SCENE inside mapOfScenes
-                    // If there is not one, we do what we've done in the begenning, we create a new DrawPrimitiveScene and add it to mapOfScenes
-                    if(mapOfScenes.count("PTR_DP_IDX")) 
-                        ptr_Scene = mapOfScenes["PTR_DP_IDX"];
-                    else {
-                        ptr_Scene = std::shared_ptr<sasha22::Scene>(new sasha22::DrawPrimitiveScene());
-                        mapOfScenes.insert(std::pair<std::string, std::shared_ptr<sasha22::Scene>>("PTR_DP_IDX", ptr_Scene));
+                    if(sasha22::Sasha22::locked) {
+                        opt_drawPrimitiveScene = lastState;
+                    } else {
+                        scene_option = SceneOption::DRAW_PRIMITIVE_SCENE;
+                        opt_spinningCubeSceneDemo = false;
+                        
+                        // First we verify if there is an existing DRAW_PRIMITIVE_SCENE inside mapOfScenes
+                        // If there is not one, we do what we've done in the begenning, we create a new DrawPrimitiveScene and add it to mapOfScenes
+                        if(mapOfScenes.count("PTR_DP_IDX")) 
+                            ptr_Scene = mapOfScenes["PTR_DP_IDX"];
+                        else {
+                            ptr_Scene = std::shared_ptr<sasha22::Scene>(new sasha22::DrawPrimitiveScene());
+                            mapOfScenes.insert(std::pair<std::string, std::shared_ptr<sasha22::Scene>>("PTR_DP_IDX", ptr_Scene));
+                        }
                     }
                 }
 
@@ -220,14 +224,18 @@ int main(int argc, char* argv[]) {
                 ImGui::MenuItem("Cubo Girando (Demonstração)", NULL, &opt_spinningCubeSceneDemo);
                 if(lastState != opt_spinningCubeSceneDemo) {
                     
-                    scene_option = SceneOption::SPINNING_CUBE_SCENE_DEMO;
-                    opt_drawPrimitiveScene = false;
+                    if(sasha22::Sasha22::locked) {
+                        opt_spinningCubeSceneDemo = lastState;
+                    } else {
+                        scene_option = SceneOption::SPINNING_CUBE_SCENE_DEMO;
+                        opt_drawPrimitiveScene = false;
 
-                    if(mapOfScenes.count("PTR_SC_IDX"))
-                        ptr_Scene = mapOfScenes["PTR_SC_IDX"];
-                    else {
-                        ptr_Scene = std::shared_ptr<sasha22::Scene>(new sasha22::SpinningCubeSceneDemo());
-                        mapOfScenes.insert(std::pair<std::string, std::shared_ptr<sasha22::Scene>>("PTR_SC_IDX", ptr_Scene));
+                        if(mapOfScenes.count("PTR_SC_IDX"))
+                            ptr_Scene = mapOfScenes["PTR_SC_IDX"];
+                        else {
+                            ptr_Scene = std::shared_ptr<sasha22::Scene>(new sasha22::SpinningCubeSceneDemo());
+                            mapOfScenes.insert(std::pair<std::string, std::shared_ptr<sasha22::Scene>>("PTR_SC_IDX", ptr_Scene));
+                        }
                     }
                 }
 

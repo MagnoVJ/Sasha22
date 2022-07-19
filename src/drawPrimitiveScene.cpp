@@ -21,10 +21,10 @@ namespace sasha22 {
         unsigned int indices[] = {
             0, 1, 3,
             1, 2, 3
-        };
+        };        
 
         //Creation of OpenGL objects (and its configuration) for drawing a quand on the screen
-        glGenVertexArrays(1, &VAO);
+        glGenVertexArrays(1, &VAO); 
         glGenBuffers(1, &VBO);
         glGenBuffers(1, &EBO);
         glBindVertexArray(VAO);
@@ -40,39 +40,45 @@ namespace sasha22 {
 
     void DrawPrimitiveScene::update_draw() {
 
-        ImGui::Begin("Primitivas"); 
-        {
-            if(ImGui::Button("Ponto"))
+        ImGui::Begin("Primitivas"); {
+            if(ImGui::Button("Ponto") && !Sasha22::locked) {
+
                 drawPrimitiveSceneOptConf("point");
-            if(ImGui::Button("Linha"))
-                drawPrimitiveSceneOptConf("line");
-            if(ImGui::Button("Triângulo"))
-                drawPrimitiveSceneOptConf("triangle");
-            if(ImGui::Button("Retângulo"))
-                drawPrimitiveSceneOptConf("rect");
-            if(ImGui::Button("Círculo"))
-                drawPrimitiveSceneOptConf("circle");
-        }
-        ImGui::End();
+                
+                //mapOfScenes.insert(std::pair<std::string, std::shared_ptr<sasha22::Scene>>("PTR_SC_IDX", ptr_Scene));
+                mapOfFloatValues.insert(std::pair<std::string, float*>("CDA_X", new float(0)));
+                mapOfFloatValues.insert(std::pair<std::string, float*>("CDA_Y", new float(0)));
+                
+                Sasha22::locked = true;
 
-        ImGui::Begin("Propriedades");
-        {
-            if(opt_drawPrimitiveScene_point) {
-                static float xPointPos = 0.0f;
-                static float yPointPos = 0.0f;
-                ImGui::DragFloat("Coordenada X", &xPointPos);
-                ImGui::DragFloat("Coordenada Y", &yPointPos);
             }
-        }
-        ImGui::End();
+            if(ImGui::Button("Linha") && !Sasha22::locked)
+                drawPrimitiveSceneOptConf("line");
+            if(ImGui::Button("Triângulo") && !Sasha22::locked)
+                drawPrimitiveSceneOptConf("triangle");
+            if(ImGui::Button("Retângulo") && !Sasha22::locked)
+                drawPrimitiveSceneOptConf("rect");
+            if(ImGui::Button("Círculo") && !Sasha22::locked)
+                drawPrimitiveSceneOptConf("circle");
+        } ImGui::End();
 
-        ImGui::Begin("Confirmação");
-        {
+        ImGui::Begin("Propriedades"); {
+            if(opt_drawPrimitiveScene_point) {
+                // You're going to create a map of pointers (to float). You're going to instantiate a pointer and insert it to the map when
+                // opt_drawPrimitiveScene is == true, then this part of the code will be executed. In this part you'll pass to ImGui::DragFloat
+                // the reference (in the map of pointers) through index, of the value you instantiated earlier. When you're done (when you press confirm
+                // or cancel, and unlock the interface) you'll delete the pointer and remove it from the map.
+                // static float xPointPos = 0.0f;
+                // static float yPointPos = 0.0f;
+                ImGui::DragFloat("Coordenada X", mapOfFloatValues["CDA_X"]);
+                ImGui::DragFloat("Coordenada Y", mapOfFloatValues["CDA_Y"]);
+            }
+        } ImGui::End();
+
+        ImGui::Begin("Confirmação"); {
             ImGui::Button("Confirmar");
             ImGui::Button("Cancelar");
-        }
-
-        ImGui::End();        
+        } ImGui::End();        
 
         glm::mat4 transform = glm::mat4(1.0f);
         transform = glm::scale(transform, glm::vec3(1.0f, 1.0f, 1.0f));
@@ -94,7 +100,7 @@ namespace sasha22 {
         opt_drawPrimitiveScene_circle = false;
 
         if(!optName.compare("point")) {
-            opt_drawPrimitiveScene_point = true;   
+            opt_drawPrimitiveScene_point = true;
         }
         if(!optName.compare("line")) {
             opt_drawPrimitiveScene_line = true;   

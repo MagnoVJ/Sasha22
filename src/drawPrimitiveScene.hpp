@@ -1,6 +1,7 @@
 #pragma once
 
 #include "scene.hpp"
+#include "sasha22.hpp"
 
 #include <glm.hpp>
 #include <gtc/matrix_transform.hpp>
@@ -11,6 +12,8 @@
 #include <stdio.h>
 #include <iostream>
 #include <string>
+#include <map>
+#include <utility>
 
 namespace sasha22 {
 
@@ -25,14 +28,13 @@ namespace sasha22 {
         bool opt_drawPrimitiveScene_rect = false;
         bool opt_drawPrimitiveScene_circle = false;
 
-        // Variable for the lock system
-        bool locked = false;
-
         void drawPrimitiveSceneOptConf(std::string optName);
 
-        void cleanUp_opt_drawPrimitiveScene_point_variables();
+        //void cleanUp_opt_drawPrimitiveScene_point_variables();
 
         Shader shd_quad;
+
+        std::map<std::string, float*> mapOfFloatValues;
 
     public:
         DrawPrimitiveScene();
