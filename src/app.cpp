@@ -163,7 +163,7 @@ int main(int argc, char* argv[]) {
             ImGui::PushStyleVar(ImGuiStyleVar_WindowRounding, 0.0f);
             ImGui::PushStyleVar(ImGuiStyleVar_WindowBorderSize, 0.0f);
             window_flags |= ImGuiWindowFlags_NoTitleBar | ImGuiWindowFlags_NoCollapse | ImGuiWindowFlags_NoResize | ImGuiWindowFlags_NoMove;
-            window_flags |= ImGuiWindowFlags_NoBringToFrontOnFocus | ImGuiWindowFlags_NoNavFocus;
+            window_flags |= ImGuiWindowFlags_NoBringToFrontOnFocus | ImGuiWindowFlags_NoNavFocus | ImGuiWindowFlags_NoScrollbar;
         }
         else {
             dockspace_flags &= ~ImGuiDockNodeFlags_PassthruCentralNode;
@@ -288,14 +288,17 @@ int main(int argc, char* argv[]) {
         // Clear all relevant buffers
         glClearColor(1.0f, 1.0f, 1.0f, 1.0f); // set clear color to white (not really necessary actually, since we won't be able to see behind the quad anyways)
         glClear(GL_COLOR_BUFFER_BIT);
-
-        ImGui::Begin("Janela de Exibição");
-
+        
+        ImGui::PushStyleVar(ImGuiStyleVar_WindowPadding, ImVec2(0,0)); /** This necessary to remove padding **/
+        ImGui::Begin("Janela de Exibição", nullptr, ImGuiWindowFlags_NoScrollbar | ImGuiWindowFlags_NoScrollWithMouse);
         // Get the size of the child (i.e. the whole draw size of the windows).
         ImVec2 wsize = ImGui::GetWindowSize();
+        std::cout << wsize.x << " " << wsize.y << "\n\n";
         // Because I use the texture from OpenGL, I need to invert the V from the UV.
         ImGui::Image((ImTextureID)textureColorbuffer, wsize, ImVec2(0, 1), ImVec2(1, 0));
         ImGui::End();
+
+        ImGui::PopStyleVar(); /** This necessary to remove padding **/
 
         // ------ End of docking --------
         ImGui::End(); 

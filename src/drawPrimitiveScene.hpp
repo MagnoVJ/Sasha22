@@ -30,8 +30,6 @@ namespace sasha22 {
 
         void drawPrimitiveSceneOptConf(std::string optName);
 
-        //void cleanUp_opt_drawPrimitiveScene_point_variables();
-
         Shader shd_quad;
 
         std::map<std::string, float*> mapOfFloatValues;

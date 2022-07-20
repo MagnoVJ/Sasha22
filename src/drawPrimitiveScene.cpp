@@ -75,9 +75,22 @@ namespace sasha22 {
             }
         } ImGui::End();
 
+        // In the confirmation section, delete all the pointers and clear the map mapOfFloatValues
         ImGui::Begin("Confirmação"); {
-            ImGui::Button("Confirmar");
-            ImGui::Button("Cancelar");
+            
+            if(ImGui::Button("Confirmar") || ImGui::Button("Cancelar")) {
+
+                for(std::map<std::string, float*>::iterator it = mapOfFloatValues.begin(); it != mapOfFloatValues.end(); ++it) {
+                    delete(it->second);
+                }
+
+                mapOfFloatValues.clear();
+
+                opt_drawPrimitiveScene_point = false;
+                sasha22::Sasha22::locked = false;
+
+            }
+            
         } ImGui::End();        
 
         glm::mat4 transform = glm::mat4(1.0f);
