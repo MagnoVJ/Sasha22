@@ -40,7 +40,7 @@ namespace sasha22 {
 
     void DrawPrimitiveScene::update_draw() {
 
-        ImGui::Begin("Primitivas"); {
+        ImGui::Begin("Primitivas", nullptr, ImGuiWindowFlags_NoResize | ImGuiWindowFlags_NoMove | ImGuiWindowFlags_NoDocking); {
             if(ImGui::Button("Ponto") && !Sasha22::locked) {
 
                 drawPrimitiveSceneOptConf("point");
@@ -62,7 +62,7 @@ namespace sasha22 {
                 drawPrimitiveSceneOptConf("circle");
         } ImGui::End();
 
-        ImGui::Begin("Propriedades"); {
+        ImGui::Begin("Propriedades" , nullptr, ImGuiWindowFlags_NoResize | ImGuiWindowFlags_NoMove | ImGuiWindowFlags_NoDocking); {
             if(opt_drawPrimitiveScene_point) {
                 // You're going to create a map of pointers (to float). You're going to instantiate a pointer and insert it to the map when
                 // opt_drawPrimitiveScene is == true, then this part of the code will be executed. In this part you'll pass to ImGui::DragFloat
@@ -76,7 +76,7 @@ namespace sasha22 {
         } ImGui::End();
 
         // In the confirmation section, delete all the pointers and clear the map mapOfFloatValues
-        ImGui::Begin("Confirmação"); {
+        ImGui::Begin("Confirmação" , nullptr, ImGuiWindowFlags_NoResize | ImGuiWindowFlags_NoMove | ImGuiWindowFlags_NoDocking); {
             
             if(ImGui::Button("Confirmar") || ImGui::Button("Cancelar")) {
 

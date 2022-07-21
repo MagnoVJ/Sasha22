@@ -19,8 +19,8 @@ void processInput(GLFWwindow* window);
 int main(int argc, char* argv[]) { 
 
     // settings
-    const unsigned int SCR_WIDTH = 1366;
-    const unsigned int SCR_HEIGHT = 768;
+    const unsigned int SCR_WIDTH = 1920;
+    const unsigned int SCR_HEIGHT = 1080;
 
     float deltaTime = 0.0f;
     float lastFrame = 0.0f;
@@ -41,6 +41,15 @@ int main(int argc, char* argv[]) {
 #ifdef __APPLE__
     glfwWindowHint(GLFW_OPENGL_FORWARD_COMPAT, GL_TRUE);
 #endif
+    
+    GLFWmonitor* monitor = glfwGetPrimaryMonitor();
+
+    const GLFWvidmode* mode = glfwGetVideoMode(monitor);
+ 
+    glfwWindowHint(GLFW_RED_BITS, mode->redBits);
+    glfwWindowHint(GLFW_GREEN_BITS, mode->greenBits);
+    glfwWindowHint(GLFW_BLUE_BITS, mode->blueBits);
+    glfwWindowHint(GLFW_REFRESH_RATE, mode->refreshRate);
 
     // glfw window creation
     // --------------------
@@ -111,7 +120,7 @@ int main(int argc, char* argv[]) {
     unsigned int textureColorbuffer;
     glGenTextures(1, &textureColorbuffer);
     glBindTexture(GL_TEXTURE_2D, textureColorbuffer);
-    glTexImage2D(GL_TEXTURE_2D, 0, GL_RGB, 1366, 768, 0, GL_RGB, GL_UNSIGNED_BYTE, NULL);
+    glTexImage2D(GL_TEXTURE_2D, 0, GL_RGB, 1920, 1080, 0, GL_RGB, GL_UNSIGNED_BYTE, NULL);
     glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_LINEAR );
     glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_LINEAR);
     glBindTexture(GL_TEXTURE_2D, 0);
@@ -122,7 +131,7 @@ int main(int argc, char* argv[]) {
     unsigned int rbo;
     glGenRenderbuffers(1, &rbo);
     glBindRenderbuffer(GL_RENDERBUFFER, rbo); 
-    glRenderbufferStorage(GL_RENDERBUFFER, GL_DEPTH24_STENCIL8, 1366, 768);  
+    glRenderbufferStorage(GL_RENDERBUFFER, GL_DEPTH24_STENCIL8, 1920, 1080);  
     glBindRenderbuffer(GL_RENDERBUFFER, 0);
 
     glFramebufferRenderbuffer(GL_FRAMEBUFFER, GL_DEPTH_STENCIL_ATTACHMENT, GL_RENDERBUFFER, rbo);
@@ -199,7 +208,26 @@ int main(int argc, char* argv[]) {
 
             if(ImGui::BeginMenu("Menu")) {
 
-                bool lastState = opt_drawPrimitiveScene;
+                bool lastState = opt_spinningCubeSceneDemo;
+                ImGui::MenuItem("Bem Vindo ao Sasha 22!", NULL, &opt_spinningCubeSceneDemo);
+                if(lastState != opt_spinningCubeSceneDemo) {
+                    
+                    if(sasha22::Sasha22::locked) {
+                        opt_spinningCubeSceneDemo = lastState;
+                    } else {
+                        scene_option = SceneOption::SPINNING_CUBE_SCENE_DEMO;
+                        opt_drawPrimitiveScene = false;
+
+                        if(mapOfScenes.count("PTR_SC_IDX"))
+                            ptr_Scene = mapOfScenes["PTR_SC_IDX"];
+                        else {
+                            ptr_Scene = std::shared_ptr<sasha22::Scene>(new sasha22::SpinningCubeSceneDemo());
+                            mapOfScenes.insert(std::pair<std::string, std::shared_ptr<sasha22::Scene>>("PTR_SC_IDX", ptr_Scene));
+                        }
+                    }
+                }
+
+                lastState = opt_drawPrimitiveScene;
                 ImGui::MenuItem("Desenhar", NULL, &opt_drawPrimitiveScene);
                 if(lastState != opt_drawPrimitiveScene) {
                     
@@ -216,25 +244,6 @@ int main(int argc, char* argv[]) {
                         else {
                             ptr_Scene = std::shared_ptr<sasha22::Scene>(new sasha22::DrawPrimitiveScene());
                             mapOfScenes.insert(std::pair<std::string, std::shared_ptr<sasha22::Scene>>("PTR_DP_IDX", ptr_Scene));
-                        }
-                    }
-                }
-
-                lastState = opt_spinningCubeSceneDemo;
-                ImGui::MenuItem("Cubo Girando (Demonstração)", NULL, &opt_spinningCubeSceneDemo);
-                if(lastState != opt_spinningCubeSceneDemo) {
-                    
-                    if(sasha22::Sasha22::locked) {
-                        opt_spinningCubeSceneDemo = lastState;
-                    } else {
-                        scene_option = SceneOption::SPINNING_CUBE_SCENE_DEMO;
-                        opt_drawPrimitiveScene = false;
-
-                        if(mapOfScenes.count("PTR_SC_IDX"))
-                            ptr_Scene = mapOfScenes["PTR_SC_IDX"];
-                        else {
-                            ptr_Scene = std::shared_ptr<sasha22::Scene>(new sasha22::SpinningCubeSceneDemo());
-                            mapOfScenes.insert(std::pair<std::string, std::shared_ptr<sasha22::Scene>>("PTR_SC_IDX", ptr_Scene));
                         }
                     }
                 }
@@ -290,10 +299,10 @@ int main(int argc, char* argv[]) {
         glClear(GL_COLOR_BUFFER_BIT);
         
         ImGui::PushStyleVar(ImGuiStyleVar_WindowPadding, ImVec2(0,0)); /** This necessary to remove padding **/
-        ImGui::Begin("Janela de Exibição", nullptr, ImGuiWindowFlags_NoScrollbar | ImGuiWindowFlags_NoScrollWithMouse);
+        ImGui::Begin("Janela de Exibição", nullptr, ImGuiWindowFlags_NoScrollbar | ImGuiWindowFlags_NoScrollWithMouse | ImGuiWindowFlags_NoResize | ImGuiWindowFlags_NoMove | ImGuiWindowFlags_NoDocking);
+        //ImGui::Begin("Janela de Exibição");
         // Get the size of the child (i.e. the whole draw size of the windows).
         ImVec2 wsize = ImGui::GetWindowSize();
-        std::cout << wsize.x << " " << wsize.y << "\n\n";
         // Because I use the texture from OpenGL, I need to invert the V from the UV.
         ImGui::Image((ImTextureID)textureColorbuffer, wsize, ImVec2(0, 1), ImVec2(1, 0));
         ImGui::End();
