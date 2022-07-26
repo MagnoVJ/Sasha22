@@ -9,6 +9,9 @@ namespace sasha22 {
     private:
         Shader shd_simpleTexturedCube;
 
+        unsigned int VBO_SpinningCube, VAO_SpinningCube;
+        unsigned int txt1_SpinningCube, txt2_SpinningCube;
+
     public:
         SpinningCubeSceneDemo();
         ~SpinningCubeSceneDemo();

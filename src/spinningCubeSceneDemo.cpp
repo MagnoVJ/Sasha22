@@ -40,7 +40,7 @@ namespace sasha22 {
                             vertices[i] = std::stof(s);
                             i++;
                         }
-
+                        
                     }
                 }
             }
@@ -49,12 +49,12 @@ namespace sasha22 {
             std::cout << "ERROR::COULDN'T READ CUBE GEOMETRY FILE" << std::endl;
         }
 
-        glGenVertexArrays(1, &VAO);
-        glGenBuffers(1, &VBO);
+        glGenVertexArrays(1, &VAO_SpinningCube);
+        glGenBuffers(1, &VBO_SpinningCube);
 
-        glBindVertexArray(VAO);
+        glBindVertexArray(VAO_SpinningCube);
 
-        glBindBuffer(GL_ARRAY_BUFFER, VBO);
+        glBindBuffer(GL_ARRAY_BUFFER, VBO_SpinningCube);
         glBufferData(GL_ARRAY_BUFFER, sizeof(vertices), vertices, GL_STATIC_DRAW);
 
         // position attribute
@@ -68,8 +68,8 @@ namespace sasha22 {
         // -------------------------
         // texture 1
         // ---------
-        glGenTextures(1, &texture1);
-        glBindTexture(GL_TEXTURE_2D, texture1);
+        glGenTextures(1, &txt1_SpinningCube);
+        glBindTexture(GL_TEXTURE_2D, txt1_SpinningCube);
         // set the texture wrapping parameters
         glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_S, GL_REPEAT);	// set texture wrapping to GL_REPEAT (default wrapping method)
         glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_T, GL_REPEAT);
@@ -91,8 +91,8 @@ namespace sasha22 {
         stbi_image_free(data);
         // texture 2
         // ---------
-        glGenTextures(1, &texture2);
-        glBindTexture(GL_TEXTURE_2D, texture2);
+        glGenTextures(1, &txt2_SpinningCube);
+        glBindTexture(GL_TEXTURE_2D, txt2_SpinningCube);
         // set the texture wrapping parameters
         glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_S, GL_REPEAT);	// set texture wrapping to GL_REPEAT (default wrapping method)
         glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_T, GL_REPEAT);
@@ -126,8 +126,8 @@ namespace sasha22 {
     }
 
     SpinningCubeSceneDemo::~SpinningCubeSceneDemo() {
-        glDeleteVertexArrays(1, &VAO);
-        glDeleteBuffers(1, &VBO);
+        glDeleteVertexArrays(1, &VAO_SpinningCube);
+        glDeleteBuffers(1, &VBO_SpinningCube);
     }
 
 
@@ -140,9 +140,9 @@ namespace sasha22 {
         ImGui::End();
 
         glActiveTexture(GL_TEXTURE0);
-        glBindTexture(GL_TEXTURE_2D, texture1);
+        glBindTexture(GL_TEXTURE_2D, txt1_SpinningCube);
         glActiveTexture(GL_TEXTURE1);
-        glBindTexture(GL_TEXTURE_2D, texture2);
+        glBindTexture(GL_TEXTURE_2D, txt2_SpinningCube);
 
         // activate shader
         shd_simpleTexturedCube.use();
@@ -172,7 +172,7 @@ namespace sasha22 {
         shd_simpleTexturedCube.setMat4("projection", projection);
 
         // render box
-        glBindVertexArray(VAO);
+        glBindVertexArray(VAO_SpinningCube);
         glDrawArrays(GL_TRIANGLES, 0, 36);
 
     }

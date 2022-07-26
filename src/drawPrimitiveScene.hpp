@@ -34,6 +34,9 @@ namespace sasha22 {
 
         std::map<std::string, float*> mapOfFloatValues;
 
+        unsigned int VBO_Quad, VAO_Quad, EBO_Quad;
+        unsigned int TXT_Quad;
+
     public:
         DrawPrimitiveScene();
         void update_draw() override;

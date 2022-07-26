@@ -13,29 +13,55 @@ namespace sasha22 {
             : shd_quad("./src/shaders/quad_vs.glsl", "./src/shaders/quad_fs.glsl") {
         
         float vertices[] = {
-            .5f,  .5f, 0.0f, // top right
-            .5f, -.5f, 0.0f, // bottom right
-           -.5f, -.5f, 0.0f, // bottom left
-           -.5f,  .5f, 0.0f  // top left
+        // positions          // colors           // texture coords
+         0.5f,  0.5f, 0.0f,   1.0f, 0.0f, 0.0f,   1.0f, 1.0f, // top right
+         0.5f, -0.5f, 0.0f,   0.0f, 1.0f, 0.0f,   1.0f, 0.0f, // bottom right
+        -0.5f, -0.5f, 0.0f,   0.0f, 0.0f, 1.0f,   0.0f, 0.0f, // bottom left
+        -0.5f,  0.5f, 0.0f,   1.0f, 1.0f, 0.0f,   0.0f, 1.0f  // top left 
         };
-        unsigned int indices[] = {
-            0, 1, 3,
-            1, 2, 3
-        };        
-
-        //Creation of OpenGL objects (and its configuration) for drawing a quand on the screen
-        glGenVertexArrays(1, &VAO); 
-        glGenBuffers(1, &VBO);
-        glGenBuffers(1, &EBO);
-        glBindVertexArray(VAO);
-        glBindBuffer(GL_ARRAY_BUFFER, VBO);
+        unsigned int indices[] = {  
+        0, 1, 3, // first triangle
+        1, 2, 3  // second triangle
+        };
+        glGenVertexArrays(1, &VAO_Quad);
+        glGenBuffers(1, &VBO_Quad);
+        glGenBuffers(1, &EBO_Quad);
+        glBindVertexArray(VAO_Quad);
+        glBindBuffer(GL_ARRAY_BUFFER, VBO_Quad);
         glBufferData(GL_ARRAY_BUFFER, sizeof(vertices), vertices, GL_STATIC_DRAW);
-        glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, EBO);
+        glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, EBO_Quad);
         glBufferData(GL_ELEMENT_ARRAY_BUFFER, sizeof(indices), indices, GL_STATIC_DRAW);
-        glVertexAttribPointer(0, 3, GL_FLOAT, GL_FALSE, 3 * sizeof(float), (void*)0);
+        // position attribute
+        glVertexAttribPointer(0, 3, GL_FLOAT, GL_FALSE, 8 * sizeof(float), (void*)0);
         glEnableVertexAttribArray(0);
-        glBindBuffer(GL_ARRAY_BUFFER, 0);
-        glBindVertexArray(0);
+        // color attribute
+        glVertexAttribPointer(1, 3, GL_FLOAT, GL_FALSE, 8 * sizeof(float), (void*)(3 * sizeof(float)));
+        glEnableVertexAttribArray(1);
+        // texture coord attribute
+        glVertexAttribPointer(2, 2, GL_FLOAT, GL_FALSE, 8 * sizeof(float), (void*)(6 * sizeof(float)));
+        glEnableVertexAttribArray(2);
+
+        glGenTextures(1, &TXT_Quad);
+        glBindTexture(GL_TEXTURE_2D, TXT_Quad); // all upcoming GL_TEXTURE_2D operations now have effect on this texture object
+        // set the texture wrapping parameters
+        glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_S, GL_REPEAT);	// set texture wrapping to GL_REPEAT (default wrapping method)
+        glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_T, GL_REPEAT);
+        // set texture filtering parameters
+        glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_LINEAR_MIPMAP_LINEAR);
+        glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_LINEAR);
+        // load image, create texture and generate mipmaps
+        int width, height, nrChannels;
+        // The FileSystem::getPath(...) is part of the GitHub repository so we can find files on any IDE/platform; replace it with your own image path.
+        unsigned char *data = stbi_load("./assets/images/GhoststarFINISHED.png", &width, &height, &nrChannels, 0);
+        if (data) {
+            glTexImage2D(GL_TEXTURE_2D, 0, GL_RGBA, width, height, 0, GL_RGBA, GL_UNSIGNED_BYTE, data);
+            glGenerateMipmap(GL_TEXTURE_2D);
+        }
+        else {
+            std::cout << "Failed to load texture" << std::endl;
+        }
+        stbi_image_free(data);
+    
     }
 
     void DrawPrimitiveScene::update_draw() {
@@ -45,7 +71,7 @@ namespace sasha22 {
 
                 drawPrimitiveSceneOptConf("point");
                 
-                //mapOfScenes.insert(std::pair<std::string, std::shared_ptr<sasha22::Scene>>("PTR_SC_IDX", ptr_Scene));
+                // mapOfScenes.insert(std::pair<std::string, std::shared_ptr<sasha22::Scene>>("PTR_SC_IDX", ptr_Scene));
                 mapOfFloatValues.insert(std::pair<std::string, float*>("CDA_X", new float(0)));
                 mapOfFloatValues.insert(std::pair<std::string, float*>("CDA_Y", new float(0)));
                 
@@ -91,13 +117,15 @@ namespace sasha22 {
 
             }
             
-        } ImGui::End();        
+        } ImGui::End();
+
 
         glm::mat4 transform = glm::mat4(1.0f);
         transform = glm::scale(transform, glm::vec3(1.0f, 1.0f, 1.0f));
+        glBindTexture(GL_TEXTURE_2D, TXT_Quad);
         shd_quad.use();
         shd_quad.setMat4("transform", transform);
-        glBindVertexArray(VAO);
+        glBindVertexArray(VAO_Quad);
         glDrawElements(GL_TRIANGLES, 6, GL_UNSIGNED_INT, 0);
 
     }
