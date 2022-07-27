@@ -5,6 +5,8 @@ With every new functionality the hope is that the software becomes more and more
 
 It's being written primarly in C/C++ with OpenGL as graphics API.
 
+![](https://github.com/MagnoVJ/Sasha22/blob/main/example1.jpg)
+
 ## How to run the Application
 This application is compiled using the C/C++ compiler from Microsoft Visual Studio 2022. All you have to do to compile/execute it, is to install the Microsoft Visual Studio 2022 with the C/C++ module.
 
