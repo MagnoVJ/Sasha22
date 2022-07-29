@@ -9,15 +9,14 @@
 
 namespace sasha22 {
 
-    DrawPrimitiveScene::DrawPrimitiveScene() 
-            : shd_quad("./src/shaders/quad_vs.glsl", "./src/shaders/quad_fs.glsl") {
+    DrawPrimitiveScene::DrawPrimitiveScene() : shd_quad("./src/shaders/quad_vs.glsl", "./src/shaders/quad_fs.glsl") {
         
         float vertices[] = {
         // positions          // colors           // texture coords
-         0.5f,  0.5f, 0.0f,   1.0f, 0.0f, 0.0f,   1.0f, 1.0f, // top right
-         0.5f, -0.5f, 0.0f,   0.0f, 1.0f, 0.0f,   1.0f, 0.0f, // bottom right
-        -0.5f, -0.5f, 0.0f,   0.0f, 0.0f, 1.0f,   0.0f, 0.0f, // bottom left
-        -0.5f,  0.5f, 0.0f,   1.0f, 1.0f, 0.0f,   0.0f, 1.0f  // top left 
+         1.0f,  1.0f, 0.0f,   1.0f, 0.0f, 0.0f,   1.0f, 1.0f, // top right
+         1.0f, -1.0f, 0.0f,   0.0f, 1.0f, 0.0f,   1.0f, 0.0f, // bottom right
+        -1.0f, -1.0f, 0.0f,   0.0f, 0.0f, 1.0f,   0.0f, 0.0f, // bottom left
+        -1.0f,  1.0f, 0.0f,   1.0f, 1.0f, 0.0f,   0.0f, 1.0f  // top left 
         };
         unsigned int indices[] = {  
         0, 1, 3, // first triangle
@@ -52,7 +51,7 @@ namespace sasha22 {
         // load image, create texture and generate mipmaps
         int width, height, nrChannels;
         // The FileSystem::getPath(...) is part of the GitHub repository so we can find files on any IDE/platform; replace it with your own image path.
-        unsigned char *data = stbi_load("./assets/images/GhoststarFINISHED.png", &width, &height, &nrChannels, 0);
+        unsigned char* data = stbi_load("./assets/images/GhoststarFINISHED.png", &width, &height, &nrChannels, 0);
         if (data) {
             glTexImage2D(GL_TEXTURE_2D, 0, GL_RGBA, width, height, 0, GL_RGBA, GL_UNSIGNED_BYTE, data);
             glGenerateMipmap(GL_TEXTURE_2D);
@@ -120,9 +119,20 @@ namespace sasha22 {
         } ImGui::End();
 
 
-        glm::mat4 transform = glm::mat4(1.0f);
-        transform = glm::scale(transform, glm::vec3(1.0f, 1.0f, 1.0f));
         glBindTexture(GL_TEXTURE_2D, TXT_Quad);
+        glm::mat4 transform = glm::mat4(1.0f);
+        transform = glm::translate(transform, glm::vec3(-1.0f, -1.0f, 0.0f));
+        // The aspect ratio of the viewport is = 1.7777 and the aspect ratio of the view window is 1.564. Let's settle with 1.6
+        // 1,1 is 1980/1549, 990/1080 = 1.6
+        /*
+            0.5 --- 1.6
+             x  --- 1
+            1.6x = 0.5
+               x = 0.3125
+            
+            The ratio between width and height needs to be 0.3125
+        */
+        transform = glm::scale(transform, glm::vec3(0.3125f, 0.5f, 1.0f));
         shd_quad.use();
         shd_quad.setMat4("transform", transform);
         glBindVertexArray(VAO_Quad);
@@ -131,7 +141,7 @@ namespace sasha22 {
     }
 
     // This function takes a string indicating what primitive you want to draw.
-    // It sets all the other primitives options to false
+    // It sets all the other primitive options to false
     void DrawPrimitiveScene::drawPrimitiveSceneOptConf(std::string optName) {
 
         opt_drawPrimitiveScene_point = false;

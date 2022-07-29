@@ -71,7 +71,7 @@ int main(int argc, char* argv[]) {
     IMGUI_CHECKVERSION();
     ImGui::CreateContext();
     ImGuiIO& io = ImGui::GetIO(); (void)io;
-    io.ConfigFlags |= ImGuiConfigFlags_NavEnableKeyboard; //Enable Keyboard Controls
+    io.ConfigFlags |= ImGuiConfigFlags_NavEnableKeyboard;       // Enable Keyboard Controls
     //io.ConfigFlags |= ImGuiConfigFlags_NavEnableGamepad;      // Enable Gamepad Controls
     io.ConfigFlags |= ImGuiConfigFlags_DockingEnable;           // Enable Docking
     io.ConfigFlags |= ImGuiConfigFlags_ViewportsEnable;         // Enable Multi-Viewport / Platform Windows
@@ -98,7 +98,6 @@ int main(int argc, char* argv[]) {
     ImVec4 clear_color = ImVec4(0.45f, 0.55f, 0.60f, 1.00f);
 
     // glad: load all OpenGL function pointers
-    // ---------------------------------------
     if (!gladLoadGLLoader((GLADloadproc)glfwGetProcAddress)) {
         std::cout << "Failed to initialize GLAD" << std::endl;
         return -1;
@@ -107,7 +106,7 @@ int main(int argc, char* argv[]) {
     glEnable(GL_DEPTH_TEST);
 
     // In order to change the start-up scene, scene_option must be changed, the ptr_Scene must be initialized with the pointer of the new scene
-    // and the index of mapOfScenes must be changed as well.
+    // And the index of mapOfScenes must be changed as well.
     SceneOption scene_option = SPINNING_CUBE_SCENE_DEMO;
     auto ptr_Scene = std::shared_ptr<sasha22::Scene>(new sasha22::SpinningCubeSceneDemo());
     std::map<std::string, std::shared_ptr<sasha22::Scene>> mapOfScenes;
@@ -162,8 +161,6 @@ int main(int argc, char* argv[]) {
         static bool opt_padding = false;
         static ImGuiDockNodeFlags dockspace_flags = ImGuiDockNodeFlags_None;
 
-        // We are using the ImGuiWindowFlags_NoDocking flag to make the parent window not dockable into,
-        // Because it would be confusing to have two docking targets within each others.
         ImGuiWindowFlags window_flags = ImGuiWindowFlags_MenuBar | ImGuiWindowFlags_NoDocking;
         if (opt_fullscreen) {
             const ImGuiViewport* viewport = ImGui::GetMainViewport();
@@ -179,16 +176,9 @@ int main(int argc, char* argv[]) {
             dockspace_flags &= ~ImGuiDockNodeFlags_PassthruCentralNode;
         }           
 
-        // When using ImGuiDockNodeFlags_PassthruCentralNode, DockSpace() will render our background
-        // and handle the pass-thru hole, so we ask Begin() to not render a background.
         if (dockspace_flags & ImGuiDockNodeFlags_PassthruCentralNode)
             window_flags |= ImGuiWindowFlags_NoBackground;
 
-        // Important: note that we proceed even if Begin() returns false (aka window is collapsed).
-        // This is because we want to keep our DockSpace() active. If a DockSpace() is inactive,
-        // all active windows docked into it will lose their parent and become undocked.
-        // We cannot preserve the docking relationship between an active window and an inactive docking, otherwise
-        // any change of dockspace/settings would lead to windows being stuck in limbo and never being visible.
         if (!opt_padding)
             ImGui::PushStyleVar(ImGuiStyleVar_WindowPadding, ImVec2(0.0f, 0.0f));
         ImGui::Begin("DockSpace Demo", nullptr, window_flags);
@@ -198,7 +188,6 @@ int main(int argc, char* argv[]) {
         if (opt_fullscreen)
             ImGui::PopStyleVar(2);
 
-        // Submit the DockSpace
         ImGuiIO& io = ImGui::GetIO();
         if (io.ConfigFlags & ImGuiConfigFlags_DockingEnable) {
             ImGuiID dockspace_id = ImGui::GetID("MyDockSpace");
@@ -305,6 +294,7 @@ int main(int argc, char* argv[]) {
         // Get the size of the child (i.e. the whole draw size of the windows).
         ImVec2 wsize = ImGui::GetWindowSize();
         // Because I use the texture from OpenGL, I need to invert the V from the UV.
+        std::cout << "(" << wsize.x << ", " << wsize.y << ")" << std::endl;
         ImGui::Image((ImTextureID)textureColorbuffer, wsize, ImVec2(0, 1), ImVec2(1, 0));
         ImGui::End();
 
@@ -317,9 +307,6 @@ int main(int argc, char* argv[]) {
 
         ImGui_ImplOpenGL3_RenderDrawData(ImGui::GetDrawData());
 
-        // Update and Render additional Platform Windows
-        // Platform functions may change the current OpenGL context, so we save/restore it to make it easier to paste this code elsewhere.
-        // For this specific demo app we could also call glfwMakeContextCurrent(window) directly)
         if (io.ConfigFlags & ImGuiConfigFlags_ViewportsEnable) {
             GLFWwindow* backup_current_context = glfwGetCurrentContext();
             ImGui::UpdatePlatformWindows();
@@ -344,17 +331,11 @@ int main(int argc, char* argv[]) {
     return 0;
 }
 
-// process all input: query GLFW whether relevant keys are pressed/released this frame and react accordingly
-// ---------------------------------------------------------------------------------------------------------
 void processInput(GLFWwindow* window) {
     if (glfwGetKey(window, GLFW_KEY_ESCAPE) == GLFW_PRESS)
         glfwSetWindowShouldClose(window, true);
 }
 
-// glfw: whenever the window size changed (by OS or user resize) this callback function executes
-// ---------------------------------------------------------------------------------------------
 void framebuffer_size_callback(GLFWwindow* window, int width, int height) {
-    // make sure the viewport matches the new window dimensions; note that width and 
-    // height will be significantly larger than specified on retina displays.
     glViewport(0, 0, width, height);
 }
