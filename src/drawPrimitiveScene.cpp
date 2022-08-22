@@ -12,15 +12,15 @@ namespace sasha22 {
     DrawPrimitiveScene::DrawPrimitiveScene() : shd_quad("./src/shaders/quad_vs.glsl", "./src/shaders/quad_fs.glsl") {
         
         float vertices[] = {
-        // positions          // colors           // texture coords
-         1.0f,  1.0f, 0.0f,   1.0f, 0.0f, 0.0f,   1.0f, 1.0f, // top right
-         1.0f, -1.0f, 0.0f,   0.0f, 1.0f, 0.0f,   1.0f, 0.0f, // bottom right
-        -1.0f, -1.0f, 0.0f,   0.0f, 0.0f, 1.0f,   0.0f, 0.0f, // bottom left
-        -1.0f,  1.0f, 0.0f,   1.0f, 1.0f, 0.0f,   0.0f, 1.0f  // top left 
+            // positions          // colors           // texture coords
+            1.0f,  1.0f, 0.0f,   1.0f, 0.0f, 0.0f,   1.0f, 1.0f, // top right
+            1.0f, -1.0f, 0.0f,   0.0f, 1.0f, 0.0f,   1.0f, 0.0f, // bottom right
+           -1.0f, -1.0f, 0.0f,   0.0f, 0.0f, 1.0f,   0.0f, 0.0f, // bottom left
+           -1.0f,  1.0f, 0.0f,   1.0f, 1.0f, 0.0f,   0.0f, 1.0f  // top left 
         };
         unsigned int indices[] = {  
-        0, 1, 3, // first triangle
-        1, 2, 3  // second triangle
+            0, 1, 3, // first triangle
+            1, 2, 3  // second triangle
         };
         glGenVertexArrays(1, &VAO_Quad);
         glGenBuffers(1, &VBO_Quad);
@@ -118,10 +118,10 @@ namespace sasha22 {
             
         } ImGui::End();
 
-
         glBindTexture(GL_TEXTURE_2D, TXT_Quad);
         glm::mat4 transform = glm::mat4(1.0f);
-        transform = glm::translate(transform, glm::vec3(-1.0f, -1.0f, 0.0f));
+        // How to convert screen resolution to -> glm::vec3(0.0f, 0.0f, 0.0f) 
+        transform = glm::translate(transform, glm::vec3(0.0f, 0.0f, 0.0f));
         // The aspect ratio of the viewport is = 1.7777 and the aspect ratio of the view window is 1.564. Let's settle with 1.6
         // 1,1 is 1980/1549, 990/1080 = 1.6
         /*
