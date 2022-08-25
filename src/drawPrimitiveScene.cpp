@@ -103,40 +103,73 @@ namespace sasha22 {
         // In the confirmation section, delete all the pointers and clear the map mapOfFloatValues
         ImGui::Begin("Confirmação" , nullptr, ImGuiWindowFlags_NoResize | ImGuiWindowFlags_NoMove | ImGuiWindowFlags_NoDocking); {
             
-            if(ImGui::Button("Confirmar") || ImGui::Button("Cancelar")) {
+            if(opt_drawPrimitiveScene_point) {
 
-                for(std::map<std::string, float*>::iterator it = mapOfFloatValues.begin(); it != mapOfFloatValues.end(); ++it) {
-                    delete(it->second);
+                if(ImGui::Button("Confirmar")) {
+
+                    float normX = 0;
+                    float normY = 0;
+
+                    // if(mapOfFloatValues["CDA_X"] != nullptr) {
+                    //     auto value = mapOfFloatValues.find("CDA_X");
+                    //     normX = *(value->second);
+                    // }
+
+                    //if(mapOfFloatValues["CDA_X"] != nullptr)
+                    normX = 2 * (*(mapOfFloatValues["CDA_X"]) - 0) / (1549 - 0) - 1;
+                    normY = 2 * (*(mapOfFloatValues["CDA_Y"]) - 0) / (990 - 0) - 1;
+
+                    ShaProp prop;
+                    prop.posX = normX;
+                    prop.posY = normY;
+
+                    vectorProp.push_back(prop);
+
+                    for(std::map<std::string, float*>::iterator it = mapOfFloatValues.begin(); it != mapOfFloatValues.end(); ++it) {
+                        delete(it->second);
+                    }
+                    mapOfFloatValues.clear();
+                    opt_drawPrimitiveScene_point = false;
+                    sasha22::Sasha22::locked = false;
+
                 }
-
-                mapOfFloatValues.clear();
-
-                opt_drawPrimitiveScene_point = false;
-                sasha22::Sasha22::locked = false;
+                if(ImGui::Button("Cancelar")) {
+                    for(std::map<std::string, float*>::iterator it = mapOfFloatValues.begin(); it != mapOfFloatValues.end(); ++it) {
+                        delete(it->second);
+                    }
+                    mapOfFloatValues.clear();
+                    opt_drawPrimitiveScene_point = false;
+                    sasha22::Sasha22::locked = false;
+                }
 
             }
             
+            
         } ImGui::End();
 
-        glBindTexture(GL_TEXTURE_2D, TXT_Quad);
-        glm::mat4 transform = glm::mat4(1.0f);
-        // How to convert screen resolution to -> glm::vec3(0.0f, 0.0f, 0.0f) 
-        transform = glm::translate(transform, glm::vec3(0.0f, 0.0f, 0.0f));
-        // The aspect ratio of the viewport is = 1.7777 and the aspect ratio of the view window is 1.564. Let's settle with 1.6
-        // 1,1 is 1980/1549, 990/1080 = 1.6
-        /*
-            0.5 --- 1.6
-             x  --- 1
-            1.6x = 0.5
-               x = 0.3125
-            
-            The ratio between width and height needs to be 0.3125
-        */
-        transform = glm::scale(transform, glm::vec3(0.3125f, 0.5f, 1.0f));
-        shd_quad.use();
-        shd_quad.setMat4("transform", transform);
-        glBindVertexArray(VAO_Quad);
-        glDrawElements(GL_TRIANGLES, 6, GL_UNSIGNED_INT, 0);
+        for(auto iVec = vectorProp.begin(); iVec < vectorProp.end(); iVec++) {
+
+            glBindTexture(GL_TEXTURE_2D, TXT_Quad);
+            glm::mat4 transform = glm::mat4(1.0f);
+            // How to convert screen resolution to -> glm::vec3(0.0f, 0.0f, 0.0f) 
+            transform = glm::translate(transform, glm::vec3(iVec->posX, iVec->posY, 0.0f));
+            // The aspect ratio of the viewport is = 1.7777 and the aspect ratio of the view window is 1.564. Let's settle with 1.6
+            // 1,1 is 1980/1549, 990/1080 = 1.6
+            /*
+                0.5 --- 1.6
+                x  --- 1
+                1.6x = 0.5
+                x = 0.3125
+                
+                The ratio between width and height needs to be 0.3125
+            */
+            transform = glm::scale(transform, glm::vec3(0.3125f, 0.5f, 1.0f));
+            shd_quad.use();
+            shd_quad.setMat4("transform", transform);
+            glBindVertexArray(VAO_Quad);
+            glDrawElements(GL_TRIANGLES, 6, GL_UNSIGNED_INT, 0);
+
+        }
 
     }
 

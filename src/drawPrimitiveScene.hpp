@@ -14,8 +14,14 @@
 #include <string>
 #include <map>
 #include <utility>
+#include <vector>
 
 namespace sasha22 {
+
+    struct ShaProp {
+        float posX;
+        float posY;
+    };
 
     class DrawPrimitiveScene : public Scene {
 
@@ -33,6 +39,8 @@ namespace sasha22 {
         Shader shd_quad;
 
         std::map<std::string, float*> mapOfFloatValues;
+        
+        std::vector<ShaProp> vectorProp; 
 
         unsigned int VBO_Quad, VAO_Quad, EBO_Quad;
         unsigned int TXT_Quad;

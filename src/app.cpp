@@ -294,7 +294,7 @@ int main(int argc, char* argv[]) {
         // Get the size of the child (i.e. the whole draw size of the windows).
         ImVec2 wsize = ImGui::GetWindowSize();
         // Because I use the texture from OpenGL, I need to invert the V from the UV.
-        // std::cout << "(" << wsize.x << ", " << wsize.y << ")" << std::endl;
+        std::cout << "(" << wsize.x << ", " << wsize.y << ")" << std::endl;
         ImGui::Image((ImTextureID)textureColorbuffer, wsize, ImVec2(0, 1), ImVec2(1, 0));
         ImGui::End();
 
